@@ -2,7 +2,7 @@ from board import Board
 import settings
 from colors import Color
 from fieldLetters import fieldLet
-# from board import BoardError
+from board import BoardError
 
 
 class Game:
@@ -17,16 +17,16 @@ class Game:
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position)
         if not self._tempBoard.validateBoard():
-            # raise BoardError(f"{content} on {position} does not match board")
-            print(f"{content} on {position} does not match current board")
+            raise BoardError(f"{content} on {position} does not match board")
+            # print(f"{content} on {position} does not match current board")
         else:
             self._board.insertHorizontal(content, position)
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position)
         if not self._tempBoard.validateBoard():
-            # raise BoardError(f"{content} on {position} does not board")
-            print(f"{content} on {position} does not match current board")
+            raise BoardError(f"{content} on {position} does not board")
+            # print(f"{content} on {position} does not match current board")
         else:
             self._board.insertVertical(content, position)
 
@@ -47,5 +47,5 @@ class Game:
 scrabble = Game()
 scrabble.horizontalWord('kot', ("B", 2))
 scrabble.verticalWord("pies", ("C", 9))
-scrabble.verticalWord("krata", ("A", 5))
+scrabble.verticalWord("krata", ("A", 6))
 scrabble.printBoard()
