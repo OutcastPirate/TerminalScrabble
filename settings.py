@@ -1,1 +1,2 @@
-boardSize = 5
+boardSize = 10
+wordsDict = './pythonscrabble/slowa.txt'
