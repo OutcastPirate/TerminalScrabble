@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from settings import wordsDict
 
 
 def getWords(letter):
     words = []
-    with open(wordsDict, 'r') as fileHandle:
+    with open(wordsDict, 'r', encoding="utf-8") as fileHandle:
         fileHandle.readline()
         for line in fileHandle:
             line = line.rstrip()
@@ -12,4 +14,4 @@ def getWords(letter):
     return words
 
 
-# print(getWords('./pythonscrabble/slowa.txt', 'a'))
+print(getWords('a'))

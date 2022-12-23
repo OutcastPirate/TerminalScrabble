@@ -3,12 +3,14 @@ import settings
 from colors import Color
 from fieldLetters import fieldLet
 from board import BoardError
+from tiles import tiles
 
 
 class Game:
     def __init__(self):
         self._tempBoard = Board()
         self._board = Board()
+        self._tiles = tiles
 
     @property
     def gameBoard(self):
