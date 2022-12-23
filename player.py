@@ -5,6 +5,7 @@ from settings import basicTileNumber
 class Player:
     def __init__(self, name):
         self._name = name
+        self._points = 0
         self._tiles = []
         self._tileLetters = []
 

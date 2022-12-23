@@ -43,7 +43,7 @@ class Game:
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position)
         if not self._tempBoard.validateBoard():
-            raise BoardError(f"{content} on {position} does not board")
+            raise BoardError(f"{content} on {position} does not match board")
             # print(f"{content} on {position} does not match current board")
         else:
             self._board.insertVertical(content, position)
@@ -64,11 +64,38 @@ class Game:
     def play(self):
         for player in self.players:
             player.getStartingTiles(self._tiles)
-            print(player._name, player._tileLetters)
-            if player._name == "Bob":
-                player.swapTiles([2, 3], self._tiles)
-                print(player._name, player._tileLetters)
-            print(len(self._tiles))
+        gameInProgress = True
+        playerIndex = 0
+        turnIndex = 0
+        while (gameInProgress):
+            print(f"{self._players[playerIndex]._name}'s turn")
+            while True:
+                turn = input("Choose a move => (s)-swap  (p)-place: ")
+                if turn == 's':
+                    break
+                if turn == 'p':
+                    word = input("Choose tiles / word: ")
+                    row = input("Choose row: ")
+                    column = int(input("Choose column: "))
+                    position = (row, column)
+                    while True:
+                        direction = input("Direction => down/right: ")
+                        if direction == 'down':
+                            self.verticalWord(word, position)
+                            break
+                        elif direction == 'right':
+                            self.horizontalWord(word, position)
+                            break
+                        else:
+                            print("Wrong direction, choose again")
+                    break
+                else:
+                    print("Wrong move, choose again.")
+            self.printBoard()
+            playerIndex = (playerIndex + 1) % len(self.players)
+            turnIndex += 1
+            if turnIndex == 4:
+                gameInProgress = False
 
 
 scrabble = Game()

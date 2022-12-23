@@ -1,3 +1,6 @@
+from tileTable import tileTable
+
+
 class CharacterError(ValueError):
     pass
 
@@ -17,7 +20,7 @@ class Field:
 
     def setLetter(self, letter):
         if self._letter == '▢' or self._letter == letter:
-            if ord(letter) > 64 and ord(letter) < 91:
+            if letter in tileTable.keys():
                 self._letter = letter
             else:
                 raise CharacterError('Not all symbols are accepted letters')
