@@ -75,7 +75,7 @@ class Game:
                 turn = input("Choose a move => (s)-swap  (p)-place: ")
                 if turn == 's':
                     print("Format: '1,2,3' -> swap the first three tiles")
-                    chosen = input("Wchich tiles do you want to swap:")
+                    chosen = input("Wchich tiles do you want to swap: ")
                     positions = chosen.split(',')
                     for number in positions:
                         number = int(number)
@@ -84,6 +84,22 @@ class Game:
                     break
                 if turn == 'p':
                     word = input("Choose tiles / word: ")
+                    word = word.upper()
+                    while True:
+                        counter = 0
+                        for letter in word:
+                            if letter not in currentPlayer._tileLetters:
+                                word = input("Invalid tiles, choose again: ")
+                                continue
+                            else:
+                                tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
+                                del currentPlayer._tiles[tileIndex]
+                                del currentPlayer._tileLetters[tileIndex]
+                                currentPlayer.reloadTiles(self._tiles)
+                                counter += 1
+
+                        if counter == len(word):
+                            break
                     row = input("Choose row: ")
                     column = int(input("Choose column: "))
                     position = (row, column)
@@ -96,15 +112,15 @@ class Game:
                             self.horizontalWord(word, position)
                             break
                         else:
-                            print("Wrong direction, choose again")
+                            print("Wrong direction, choose again: ")
                     self.printBoard()
                     break
                 else:
-                    print("Wrong move, choose again.")
+                    print("Wrong move, choose again: ")
 
             playerIndex = (playerIndex + 1) % len(self.players)
             turnIndex += 1
-            if turnIndex == 4:
+            if turnIndex == 10:
                 gameInProgress = False
             print('\n' + " - " * 20 + "\n")
 

@@ -24,6 +24,14 @@ class Player:
             tiles.remove(tile)
         self.updateLetters()
 
+    def reloadTiles(self, tiles):
+        tempTiles = sample(tiles, (basicTileNumber - len(self._tiles)))
+        for tile in tempTiles:
+            self._tiles.append(tile)
+        for tile in tempTiles:
+            tiles.remove(tile)
+        self.updateLetters()
+
     def updateLetters(self):
         self._tileLetters = []
         for i in range(basicTileNumber):
