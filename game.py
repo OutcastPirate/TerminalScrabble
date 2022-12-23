@@ -68,10 +68,19 @@ class Game:
         playerIndex = 0
         turnIndex = 0
         while (gameInProgress):
-            print(f"{self._players[playerIndex]._name}'s turn")
+            currentPlayer = self._players[playerIndex]
+            print(f"{currentPlayer._name}'s turn")
+            print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
                 turn = input("Choose a move => (s)-swap  (p)-place: ")
                 if turn == 's':
+                    print("Format: '1,2,3' -> swap the first three tiles")
+                    chosen = input("Wchich tiles do you want to swap:")
+                    positions = chosen.split(',')
+                    for number in positions:
+                        number = int(number)
+                    currentPlayer.swapTiles(positions, self._tiles)
+                    print(f'Your new tiles: {currentPlayer._tileLetters}')
                     break
                 if turn == 'p':
                     word = input("Choose tiles / word: ")
@@ -88,14 +97,16 @@ class Game:
                             break
                         else:
                             print("Wrong direction, choose again")
+                    self.printBoard()
                     break
                 else:
                     print("Wrong move, choose again.")
-            self.printBoard()
+
             playerIndex = (playerIndex + 1) % len(self.players)
             turnIndex += 1
             if turnIndex == 4:
                 gameInProgress = False
+            print('\n' + " - " * 20 + "\n")
 
 
 scrabble = Game()

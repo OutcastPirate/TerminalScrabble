@@ -18,7 +18,7 @@ class Player:
     def swapTiles(self, positions, tiles):
         tempTiles = sample(tiles, len(positions))
         for i in range(len(positions)):
-            del self._tiles[positions[i] - 1]
+            del self._tiles[int(positions[i]) - 1 - i]
         for tile in tempTiles:
             self._tiles.append(tile)
             tiles.remove(tile)
