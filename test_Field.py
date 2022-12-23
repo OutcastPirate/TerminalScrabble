@@ -2,6 +2,7 @@ from field import Field, CharacterError, FieldError
 from pytest import raises
 from board import BoardError
 from game import Game
+from player import Player
 
 
 def test_Field():
@@ -29,3 +30,9 @@ def test_BoardError():
     scrabble.verticalWord("pies", ("C", 9))
     with raises(BoardError):
         scrabble.verticalWord("krata", ("A", 5))
+
+
+def test_playerTileStart():
+    Jack = Player("Jack")
+    Jack.getStartingTiles()
+    assert len(Jack._tiles) == 7
