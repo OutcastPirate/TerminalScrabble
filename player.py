@@ -2,6 +2,10 @@ from random import sample
 from settings import basicTileNumber
 
 
+class TileError(Exception):
+    pass
+
+
 class Player:
     def __init__(self, name):
         self._name = name
@@ -16,6 +20,8 @@ class Player:
         self.updateLetters()
 
     def swapTiles(self, positions, tiles):
+        if len(tiles) < len(positions):
+            raise TileError("Not enough tiles left")
         tempTiles = sample(tiles, len(positions))
         for i in range(len(positions)):
             del self._tiles[int(positions[i]) - 1 - i]
@@ -26,6 +32,8 @@ class Player:
 
     def reloadTiles(self, tiles):
         tempTiles = sample(tiles, (basicTileNumber - len(self._tiles)))
+        if len(tiles) < (basicTileNumber - len(self._tiles)):
+            tempTiles = sample(tiles, len(tiles))
         for tile in tempTiles:
             self._tiles.append(tile)
         for tile in tempTiles:

@@ -69,6 +69,7 @@ class Game:
         turnIndex = 0
         while (gameInProgress):
             currentPlayer = self._players[playerIndex]
+            print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{currentPlayer._name}'s turn")
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
