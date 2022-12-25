@@ -61,6 +61,48 @@ class Game:
                     print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')
             print('\n')
 
+    def placeTilesTurn(self, currentPlayer):
+        word = input("Choose tiles / word: ")
+        word = word.upper()
+        while True:
+            counter = 0
+            for letter in word:
+                if letter not in currentPlayer._tileLetters:
+                    word = input("Invalid tiles, choose again: ")
+                    continue
+                else:
+                    tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
+                    del currentPlayer._tiles[tileIndex]
+                    del currentPlayer._tileLetters[tileIndex]
+                    currentPlayer.reloadTiles(self._tiles)
+                    counter += 1
+
+            if counter == len(word):
+                break
+        row = input("Choose row: ")
+        column = int(input("Choose column: "))
+        position = (row, column)
+        while True:
+            direction = input("Direction => down/right: ")
+            if direction == 'down':
+                self.verticalWord(word, position)
+                break
+            elif direction == 'right':
+                self.horizontalWord(word, position)
+                break
+            else:
+                print("Wrong direction, choose again: ")
+        self.printBoard()
+
+    def swapTilesTurn(self, currentPlayer):
+        print("Format: '1,2,3' -> swap the first three tiles")
+        chosen = input("Wchich tiles do you want to swap: ")
+        positions = chosen.split(',')
+        for number in positions:
+            number = int(number)
+        currentPlayer.swapTiles(positions, self._tiles)
+        print(f'Your new tiles: {currentPlayer._tileLetters}')
+
     def play(self):
         for player in self.players:
             player.getStartingTiles(self._tiles)
@@ -75,46 +117,10 @@ class Game:
             while True:
                 turn = input("Choose a move => (s)-swap  (p)-place: ")
                 if turn == 's':
-                    print("Format: '1,2,3' -> swap the first three tiles")
-                    chosen = input("Wchich tiles do you want to swap: ")
-                    positions = chosen.split(',')
-                    for number in positions:
-                        number = int(number)
-                    currentPlayer.swapTiles(positions, self._tiles)
-                    print(f'Your new tiles: {currentPlayer._tileLetters}')
+                    self.swapTilesTurn(currentPlayer)
                     break
                 if turn == 'p':
-                    word = input("Choose tiles / word: ")
-                    word = word.upper()
-                    while True:
-                        counter = 0
-                        for letter in word:
-                            if letter not in currentPlayer._tileLetters:
-                                word = input("Invalid tiles, choose again: ")
-                                continue
-                            else:
-                                tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
-                                del currentPlayer._tiles[tileIndex]
-                                del currentPlayer._tileLetters[tileIndex]
-                                currentPlayer.reloadTiles(self._tiles)
-                                counter += 1
-
-                        if counter == len(word):
-                            break
-                    row = input("Choose row: ")
-                    column = int(input("Choose column: "))
-                    position = (row, column)
-                    while True:
-                        direction = input("Direction => down/right: ")
-                        if direction == 'down':
-                            self.verticalWord(word, position)
-                            break
-                        elif direction == 'right':
-                            self.horizontalWord(word, position)
-                            break
-                        else:
-                            print("Wrong direction, choose again: ")
-                    self.printBoard()
+                    self.placeTilesTurn(currentPlayer)
                     break
                 else:
                     print("Wrong move, choose again: ")
