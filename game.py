@@ -5,6 +5,7 @@ from fieldLetters import fieldLet
 from board import BoardError
 from tiles import tiles
 from player import Player
+from math import floor
 
 
 class Game:
@@ -55,7 +56,10 @@ class Game:
         for i in range(settings.boardSize):
             print(f'{Color.BOLD}{fieldLet(i+1)}{Color.ENDC}', end="\t")
             for field in self.gameBoard.getBoard()[i]:
-                if field.letter == '▢':
+                middle = floor(settings.boardSize / 2)
+                if field == self.gameBoard.getBoard()[middle][middle]:
+                    print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
+                elif field.letter == settings.boardCharacter:
                     print(f'{Color.RED}{field.letter}{Color.ENDC}', end='\t')
                 else:
                     print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')

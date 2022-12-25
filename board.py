@@ -1,4 +1,4 @@
-from settings import boardSize
+from settings import boardSize, boardCharacter
 from field import Field
 from fieldLetters import fieldInt
 from checkDict import getWords
@@ -21,7 +21,10 @@ def wordInDict(word):
 
 class Board:
     def __init__(self):
-        self._size = boardSize
+        if boardSize % 2 == 0:
+            raise BoardError("Board size have to be an odd number")
+        else:
+            self._size = boardSize
         self._fields = []
         for i in range(boardSize):
             row = []
@@ -53,7 +56,7 @@ class Board:
             row = ''
             for o in range(boardSize):
                 row += self._fields[i][o].letter
-            line = row.split('▢')
+            line = row.split(boardCharacter)
             for word in line:
                 if word != '' and len(word) > 1:
                     words.append(word)
@@ -61,7 +64,7 @@ class Board:
             row = ''
             for o in range(boardSize):
                 row += self._fields[o][i].letter
-            line = row.split('▢')
+            line = row.split(boardCharacter)
             for word in line:
                 if word != '' and len(word) > 1:
                     words.append(word)

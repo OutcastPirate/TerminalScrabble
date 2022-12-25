@@ -5,6 +5,7 @@ class Color:
     GRE = '\033[92m'
     YEL = '\033[93m'
     RED = '\033[91m'
+    MID = '\033[93m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
