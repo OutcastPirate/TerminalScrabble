@@ -24,6 +24,7 @@ class Player:
             raise TileError("Not enough tiles left")
         tempTiles = sample(tiles, len(positions))
         for i in range(len(positions)):
+            tiles.append(self._tiles[int(positions[i]) - 1 - i])
             del self._tiles[int(positions[i]) - 1 - i]
         for tile in tempTiles:
             self._tiles.append(tile)
