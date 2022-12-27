@@ -37,21 +37,23 @@ class Game:
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position)
-        if not self._tempBoard.validateBoard():
-            raise BoardError(f"{content} on {position} does not match board")
-            # print(f"{content} on {position} does not match current board")
-        else:
-            pass
-            # self._board.insertHorizontal(content, position)
+        # if not self._tempBoard.validateBoard():
+        #     raise BoardError(f"{content} on {position} does not match board")
+        #     # print(f"{content} on {position} does not match current board")
+        # else:
+        #     pass
+        #     self._board.insertHorizontal(content, position)
+        pass
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position)
-        if not self._tempBoard.validateBoard():
-            raise BoardError(f"{content} on {position} does not match board")
-            # print(f"{content} on {position} does not match current board")
-        else:
-            pass
-            # self._board.insertVertical(content, position)
+        # if not self._tempBoard.validateBoard():
+        #     raise BoardError(f"{content} on {position} does not match board")
+        #     # print(f"{content} on {position} does not match current board")
+        # else:
+        #     pass
+        #     self._board.insertVertical(content, position)
+        pass
 
     def printBoard(self):
         for i in range(settings.boardSize+1):
@@ -139,7 +141,6 @@ class Game:
         playerMoveCounter = 0
         while (gameInProgress):
             os.system('cls')
-            os.system('cls')
             self.printTempBoard()
             endTurn = False
             currentPlayer = self._players[playerIndex]
@@ -176,12 +177,17 @@ class Game:
                     print("Wrong move, choose again: ")
                 if endTurn:
                     # self._board = copy(self._tempBoard)
-                    self.turnBoards(self._board, self._tempBoard)
-                    currentPlayer.reloadTiles(self._tiles)
-                    playerIndex = (playerIndex + 1) % len(self.players)
-                    playerMoveCounter = 0
-                    turnIndex += 1
-                    break
+                    try:
+                        if not self._tempBoard.validateBoard():
+                            raise BoardError()
+                        self.turnBoards(self._board, self._tempBoard)
+                        currentPlayer.reloadTiles(self._tiles)
+                        playerIndex = (playerIndex + 1) % len(self.players)
+                        playerMoveCounter = 0
+                        turnIndex += 1
+                        break
+                    except BoardError:
+                        print("Current board layout is incorrect")
 
 
 scrabble = Game()
