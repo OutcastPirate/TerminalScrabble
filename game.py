@@ -6,6 +6,7 @@ from board import BoardError
 from tiles import tiles
 from player import Player
 from math import floor
+from copy import copy
 import os
 
 
@@ -40,7 +41,8 @@ class Game:
             raise BoardError(f"{content} on {position} does not match board")
             # print(f"{content} on {position} does not match current board")
         else:
-            self._board.insertHorizontal(content, position)
+            pass
+            # self._board.insertHorizontal(content, position)
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position)
@@ -48,7 +50,8 @@ class Game:
             raise BoardError(f"{content} on {position} does not match board")
             # print(f"{content} on {position} does not match current board")
         else:
-            self._board.insertVertical(content, position)
+            pass
+            # self._board.insertVertical(content, position)
 
     def printBoard(self):
         for i in range(settings.boardSize+1):
@@ -66,8 +69,24 @@ class Game:
                     print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')
             print('\n')
 
+    def printTempBoard(self):
+        for i in range(settings.boardSize+1):
+            print(f'{Color.BOLD}{i}{Color.ENDC}', end="\t")
+        print('\n')
+        for i in range(settings.boardSize):
+            print(f'{Color.BOLD}{fieldLet(i+1)}{Color.ENDC}', end="\t")
+            for field in self._tempBoard.getBoard()[i]:
+                middle = floor(settings.boardSize / 2)
+                if field == self._tempBoard.getBoard()[middle][middle]:
+                    print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
+                elif field.letter == settings.boardCharacter:
+                    print(f'{Color.RED}{field.letter}{Color.ENDC}', end='\t')
+                else:
+                    print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')
+            print('\n')
+
     def placeTilesTurn(self, currentPlayer):
-        word = input("Choose tile: ")
+        word = input("Choose tile(s): ")
         word = word.upper()
         while True:
             counter = 0
@@ -106,6 +125,11 @@ class Game:
         currentPlayer.swapTiles(positions, self._tiles)
         print(f'Your new tiles: {currentPlayer._tileLetters}')
 
+    def turnBoards(self, board, finalBoard):
+        for i in range(settings.boardSize):
+            for o in range(settings.boardSize):
+                board._fields[i][o]._letter = finalBoard._fields[i][o]._letter
+
     def play(self):
         for player in self.players:
             player.getStartingTiles(self._tiles)
@@ -116,18 +140,23 @@ class Game:
         while (gameInProgress):
             os.system('cls')
             os.system('cls')
-            self.printBoard()
+            self.printTempBoard()
             endTurn = False
             currentPlayer = self._players[playerIndex]
+            if playerMoveCounter == 0:
+                cancelTurn = {
+                    'tiles': copy(currentPlayer._tiles),
+                    'board': copy(self._board)
+                }
             print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{currentPlayer._name}'s turn")
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
                 playerMoveCounter += 1
                 if playerMoveCounter == 1:
-                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
+                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn:")  # noqa: E501
                 else:
-                    turn = input("Choose a move => (p)-place (e)-end turn: ")
+                    turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
                 if turn == 's' and playerMoveCounter == 1:
                     self.swapTilesTurn(currentPlayer)
                     endTurn = True
@@ -136,11 +165,21 @@ class Game:
                     break
                 elif turn == 'e':
                     endTurn = True
+                elif turn == 'c':
+                    # self._tempBoard = copy(cancelTurn['board'])
+                    self._tempBoard = copy(self._board)
+                    currentPlayer._tiles = copy(cancelTurn['tiles'])
+                    currentPlayer.updateLetters()
+                    playerMoveCounter = 0
+                    break
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
+                    # self._board = copy(self._tempBoard)
+                    self.turnBoards(self._board, self._tempBoard)
                     currentPlayer.reloadTiles(self._tiles)
                     playerIndex = (playerIndex + 1) % len(self.players)
+                    playerMoveCounter = 0
                     turnIndex += 1
                     break
 
