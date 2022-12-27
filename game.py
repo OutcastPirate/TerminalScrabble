@@ -6,6 +6,7 @@ from board import BoardError
 from tiles import tiles
 from player import Player
 from math import floor
+import os
 
 
 class Game:
@@ -66,7 +67,7 @@ class Game:
             print('\n')
 
     def placeTilesTurn(self, currentPlayer):
-        word = input("Choose tiles / word: ")
+        word = input("Choose tile: ")
         word = word.upper()
         while True:
             counter = 0
@@ -78,7 +79,6 @@ class Game:
                     tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
                     del currentPlayer._tiles[tileIndex]
                     del currentPlayer._tileLetters[tileIndex]
-                    currentPlayer.reloadTiles(self._tiles)
                     counter += 1
 
             if counter == len(word):
@@ -96,7 +96,6 @@ class Game:
                 break
             else:
                 print("Wrong direction, choose again: ")
-        self.printBoard()
 
     def swapTilesTurn(self, currentPlayer):
         print("Format: '1,2,3' -> swap the first three tiles")
@@ -113,27 +112,37 @@ class Game:
         gameInProgress = True
         playerIndex = 0
         turnIndex = 0
+        playerMoveCounter = 0
         while (gameInProgress):
+            os.system('cls')
+            os.system('cls')
+            self.printBoard()
+            endTurn = False
             currentPlayer = self._players[playerIndex]
             print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{currentPlayer._name}'s turn")
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
-                turn = input("Choose a move => (s)-swap  (p)-place: ")
-                if turn == 's':
+                playerMoveCounter += 1
+                if playerMoveCounter == 1:
+                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
+                else:
+                    turn = input("Choose a move => (p)-place (e)-end turn: ")
+                if turn == 's' and playerMoveCounter == 1:
                     self.swapTilesTurn(currentPlayer)
-                    break
-                if turn == 'p':
+                    endTurn = True
+                elif turn == 'p':
                     self.placeTilesTurn(currentPlayer)
                     break
+                elif turn == 'e':
+                    endTurn = True
                 else:
                     print("Wrong move, choose again: ")
-
-            playerIndex = (playerIndex + 1) % len(self.players)
-            turnIndex += 1
-            if turnIndex == 10:
-                gameInProgress = False
-            print('\n' + " - " * 20 + "\n")
+                if endTurn:
+                    currentPlayer.reloadTiles(self._tiles)
+                    playerIndex = (playerIndex + 1) % len(self.players)
+                    turnIndex += 1
+                    break
 
 
 scrabble = Game()
