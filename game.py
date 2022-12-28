@@ -126,6 +126,7 @@ class Game:
             number = int(number)
         currentPlayer.swapTiles(positions, self._tiles)
         print(f'Your new tiles: {currentPlayer._tileLetters}')
+        os.system('pause')
 
     def turnBoards(self, board, finalBoard):
         for i in range(settings.boardSize):
@@ -141,6 +142,8 @@ class Game:
         playerMoveCounter = 0
         while (gameInProgress):
             os.system('cls')
+            print('.')
+            os.system('cls')
             self.printTempBoard()
             endTurn = False
             currentPlayer = self._players[playerIndex]
@@ -155,7 +158,7 @@ class Game:
             while True:
                 playerMoveCounter += 1
                 if playerMoveCounter == 1:
-                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn:")  # noqa: E501
+                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
                 else:
                     turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
                 if turn == 's' and playerMoveCounter == 1:
@@ -168,7 +171,8 @@ class Game:
                     endTurn = True
                 elif turn == 'c':
                     # self._tempBoard = copy(cancelTurn['board'])
-                    self._tempBoard = copy(self._board)
+                    # self._tempBoard = copy(self._board)
+                    self.turnBoards(self._tempBoard, self._board)
                     currentPlayer._tiles = copy(cancelTurn['tiles'])
                     currentPlayer.updateLetters()
                     playerMoveCounter = 0
