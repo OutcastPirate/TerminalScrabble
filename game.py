@@ -35,6 +35,17 @@ class Game:
     def players(self):
         return self._players
 
+    def displayLeaderboard(self):
+        os.system('cls')
+        print('\n')
+        print(f'\t{Color.BOLD}{Color.BLU}{"Leaderboard":^30}{Color.ENDC}')
+        print(f'\t{Color.BOLD}{"Player":20}{"Points":>10}{Color.ENDC}')
+        print("\t" + f"{Color.BOLD}-{Color.ENDC}" * 30)
+        for player in self._players:
+            print(f'\t{player._name:20}{player._points:>10}')
+        print('\n' * 5)
+        os.system('pause')
+
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position)
         # if not self._tempBoard.validateBoard():
@@ -192,6 +203,8 @@ class Game:
                         playerIndex = (playerIndex + 1) % len(self.players)
                         playerMoveCounter = 0
                         turnIndex += 1
+                        if playerIndex == 0:
+                            self.displayLeaderboard()
                         break
                     except BoardError:
                         print("Current board layout is incorrect")
