@@ -57,7 +57,7 @@ class Game:
 
     def printBoard(self):
         for i in range(settings.boardSize+1):
-            print(f'{Color.BOLD}{i}{Color.ENDC}', end="\t")
+            print(f'{Color.BOLD}{i}{Color.ENDC}', end="")
         print('\n')
         for i in range(settings.boardSize):
             print(f'{Color.BOLD}{fieldLet(i+1)}{Color.ENDC}', end="\t")
@@ -73,18 +73,21 @@ class Game:
 
     def printTempBoard(self):
         for i in range(settings.boardSize+1):
-            print(f'{Color.BOLD}{i}{Color.ENDC}', end="\t")
+            print(f'{Color.BOLD} {i} {Color.ENDC}', end="\t")
         print('\n')
         for i in range(settings.boardSize):
-            print(f'{Color.BOLD}{fieldLet(i+1)}{Color.ENDC}', end="\t")
+            print(f'{Color.BOLD} {fieldLet(i+1)}{Color.ENDC}', end="\t")
             for field in self._tempBoard.getBoard()[i]:
                 middle = floor(settings.boardSize / 2)
                 if field == self._tempBoard.getBoard()[middle][middle]:
-                    print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
+                    if field.letter == settings.boardCharacter:
+                        print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
+                    else:
+                        print(f'{Color.MID}{Color.BOLD} {field.letter} {Color.ENDC}', end='\t')  # noqa: E501
                 elif field.letter == settings.boardCharacter:
                     print(f'{Color.RED}{field.letter}{Color.ENDC}', end='\t')
                 else:
-                    print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')
+                    print(f'{Color.GRE} {field.letter} {Color.ENDC}', end='\t')
             print('\n')
 
     def placeTilesTurn(self, currentPlayer):
