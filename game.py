@@ -4,6 +4,7 @@ from colors import Color
 from fieldLetters import fieldLet
 from board import BoardError
 from tiles import tiles
+from tile import TileError
 from player import Player
 from math import floor
 from copy import copy
@@ -113,6 +114,9 @@ class Game:
         position = (row, column)
         word = input("Choose tile(s): ")
         word = word.upper()
+        for letter in word:
+            if letter not in currentPlayer._tileLetters:
+                raise TileError
         while True:
             direction = input("Direction => down/right: ")
             if direction == 'down':
@@ -200,11 +204,19 @@ class Game:
                 elif turn == 'p':
                     try:
                         self.placeTilesTurn(currentPlayer)
+                        middle = floor(settings.boardSize / 2)
+                        if self._tempBoard.getBoard()[middle][middle]._letter == settings.boardCharacter:  # noqa: E501
+                            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
+                            print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
+                            os.system('pause')
                     except IndexError:
                         print("Chosen row/column does not exist")
                         os.system('pause')
                     except FieldError:
                         print("Chosen field is occupied")
+                        os.system('pause')
+                    except TileError:
+                        print("\nAvailable tiles don't match the input.\n")
                         os.system('pause')
                     break
                 elif turn == 'e':
