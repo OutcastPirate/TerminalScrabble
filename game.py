@@ -7,6 +7,7 @@ from tiles import tiles
 from player import Player
 from math import floor
 from copy import copy
+from field import FieldError
 import os
 
 
@@ -102,8 +103,26 @@ class Game:
             print('\n')
 
     def placeTilesTurn(self, currentPlayer):
+        row = input("Choose row: ")
+        column = int(input("Choose column: "))
+        rows = []
+        for i in range(settings.boardSize):
+            rows.append(fieldLet(i+1))
+        if column not in range(1, settings.boardSize + 1) or row not in rows:
+            raise IndexError
+        position = (row, column)
         word = input("Choose tile(s): ")
         word = word.upper()
+        while True:
+            direction = input("Direction => down/right: ")
+            if direction == 'down':
+                self.verticalWord(word, position)
+                break
+            elif direction == 'right':
+                self.horizontalWord(word, position)
+                break
+            else:
+                print("Wrong direction, choose again: ")
         while True:
             counter = 0
             for letter in word:
@@ -115,22 +134,8 @@ class Game:
                     del currentPlayer._tiles[tileIndex]
                     del currentPlayer._tileLetters[tileIndex]
                     counter += 1
-
             if counter == len(word):
                 break
-        row = input("Choose row: ")
-        column = int(input("Choose column: "))
-        position = (row, column)
-        while True:
-            direction = input("Direction => down/right: ")
-            if direction == 'down':
-                self.verticalWord(word, position)
-                break
-            elif direction == 'right':
-                self.horizontalWord(word, position)
-                break
-            else:
-                print("Wrong direction, choose again: ")
 
     def swapTilesTurn(self, currentPlayer):
         print("Format: '1,2,3' -> swap the first three tiles")
@@ -141,6 +146,11 @@ class Game:
         currentPlayer.swapTiles(positions, self._tiles)
         print(f'Your new tiles: {currentPlayer._tileLetters}')
         os.system('pause')
+
+    def cancelMoveTurn(self, currentPlayer, tiles):
+        self.turnBoards(self._tempBoard, self._board)
+        currentPlayer._tiles = copy(tiles)
+        currentPlayer.updateLetters()
 
     def turnBoards(self, board, finalBoard):
         for i in range(settings.boardSize):
@@ -188,22 +198,24 @@ class Game:
                     self.swapTilesTurn(currentPlayer)
                     endTurn = True
                 elif turn == 'p':
-                    self.placeTilesTurn(currentPlayer)
+                    try:
+                        self.placeTilesTurn(currentPlayer)
+                    except IndexError:
+                        print("Chosen row/column does not exist")
+                        os.system('pause')
+                    except FieldError:
+                        print("Chosen field is occupied")
+                        os.system('pause')
                     break
                 elif turn == 'e':
                     endTurn = True
                 elif turn == 'c':
-                    # self._tempBoard = copy(cancelTurn['board'])
-                    # self._tempBoard = copy(self._board)
-                    self.turnBoards(self._tempBoard, self._board)
-                    currentPlayer._tiles = copy(cancelTurn['tiles'])
-                    currentPlayer.updateLetters()
+                    self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                     playerMoveCounter = 0
                     break
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
-                    # self._board = copy(self._tempBoard)
                     try:
                         if not self._tempBoard.validateBoard():
                             raise BoardError()
