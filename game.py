@@ -49,7 +49,7 @@ class Game:
         os.system('pause')
 
     def horizontalWord(self, content, position):
-        self._tempBoard.insertHorizontal(content, position)
+        self._tempBoard.insertHorizontal(content, position, self._board)
         # if not self._tempBoard.validateBoard():
         #     raise BoardError(f"{content} on {position} does not match board")
         #     # print(f"{content} on {position} does not match current board")
@@ -59,7 +59,7 @@ class Game:
         pass
 
     def verticalWord(self, content, position):
-        self._tempBoard.insertVertical(content, position)
+        self._tempBoard.insertVertical(content, position, self._board)
         # if not self._tempBoard.validateBoard():
         #     raise BoardError(f"{content} on {position} does not match board")
         #     # print(f"{content} on {position} does not match current board")
@@ -155,10 +155,10 @@ class Game:
             column = int(position[0])
             direction = 'down'
         rows = []
-        for i in range(settings.boardSize):
+        for i in range(settings.boardSize + 1):
             rows.append(fieldLet(i+1))
-        if column not in range(1, settings.boardSize + 1) or row not in rows:
-            raise IndexError
+        if column <= 0 or column > settings.boardSize or row not in rows:
+            raise IndexError("Coords out of bounds")
         coords = (row, column)
         word = input("Choose tile(s): ")
         word = word.upper()
@@ -166,9 +166,9 @@ class Game:
             if letter not in currentPlayer._tileLetters:
                 raise TileError
         if direction == 'down':
-            self.verticalWord(word, coords, self._board)
+            self.verticalWord(word, coords)
         elif direction == 'right':
-            self.horizontalWord(word, coords, self._board)
+            self.horizontalWord(word, coords)
         for letter in word:
             tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
             del currentPlayer._tiles[tileIndex]
@@ -242,9 +242,9 @@ class Game:
                             self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
                             print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
                             os.system('pause')
-                    except IndexError:
-                        print("Chosen row/column does not exist")
-                        os.system('pause')
+                    # except IndexError:
+                    #     print("Chosen row/column does not exist")
+                    #     os.system('pause')
                     except FieldError:
                         print("Chosen field is occupied")
                         os.system('pause')

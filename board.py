@@ -2,6 +2,7 @@ from settings import boardSize, boardCharacter
 from field import Field
 from fieldLetters import fieldInt
 from checkDict import getWords
+import os
 
 
 class WrongWordError(Exception):
@@ -40,6 +41,20 @@ class Board:
         row, column = position
         row = fieldInt(row[0])
         content = content.upper()
+        validate = []
+        validate.append((row - 1, column - 2))
+        for i in range(len(content)):
+            validate.append((row, column + i - 1))
+            validate.append((row - 2, column + i - 1))
+        validate.append((row - 1, column - 1 + len(content)))
+        letters = []
+        for field in validate:
+            try:
+                letters.append(self._fields[field[0]][field[1]]._letter)
+            except IndexError:
+                pass
+        print(set(letters))
+        os.system('pause')
         for i in range(len(content)):
             self._fields[row - 1][column + i - 1].setLetter(content[i])
 
