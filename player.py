@@ -1,5 +1,6 @@
 from random import sample
 from settings import basicTileNumber
+from pointTable import pointTable
 
 
 class TileError(Exception):
@@ -45,3 +46,8 @@ class Player:
         self._tileLetters = []
         for i in range(basicTileNumber):
             self._tileLetters.append(self._tiles[i]._letter)
+
+    def givePoints(self, words):
+        for word in words:
+            for letter in word:
+                self._points += pointTable[letter]

@@ -147,6 +147,15 @@ class Game:
             for o in range(settings.boardSize):
                 board._fields[i][o]._letter = finalBoard._fields[i][o]._letter
 
+    def checkNewWords(self):
+        newWords = []
+        boardWords = self._board.getWords()
+        tempBoardWords = self._tempBoard.getWords()
+        for word in tempBoardWords:
+            if word not in boardWords:
+                newWords.append(word)
+        return newWords
+
     def play(self):
         for player in self.players:
             player.getStartingTiles(self._tiles)
@@ -198,6 +207,7 @@ class Game:
                     try:
                         if not self._tempBoard.validateBoard():
                             raise BoardError()
+                        currentPlayer.givePoints(self.checkNewWords())
                         self.turnBoards(self._board, self._tempBoard)
                         currentPlayer.reloadTiles(self._tiles)
                         playerIndex = (playerIndex + 1) % len(self.players)

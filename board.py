@@ -73,3 +73,23 @@ class Board:
                 # raise WrongWordError(f"{word} doesn't exist in dictionary.")
                 return False
         return True
+
+    def getWords(self):
+        words = []
+        for i in range(boardSize):
+            row = ''
+            for o in range(boardSize):
+                row += self._fields[i][o].letter
+            line = row.split(boardCharacter)
+            for word in line:
+                if word != '' and len(word) > 1:
+                    words.append(word)
+        for i in range(boardSize):
+            row = ''
+            for o in range(boardSize):
+                row += self._fields[o][i].letter
+            line = row.split(boardCharacter)
+            for word in line:
+                if word != '' and len(word) > 1:
+                    words.append(word)
+        return words
