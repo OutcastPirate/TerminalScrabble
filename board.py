@@ -36,14 +36,14 @@ class Board:
     def getBoard(self):
         return self._fields
 
-    def insertHorizontal(self, content, position):
+    def insertHorizontal(self, content, position, reference):
         row, column = position
         row = fieldInt(row[0])
         content = content.upper()
         for i in range(len(content)):
             self._fields[row - 1][column + i - 1].setLetter(content[i])
 
-    def insertVertical(self, content, position):
+    def insertVertical(self, content, position, reference):
         row, column = position
         row = fieldInt(row[0])
         content = content.upper()
