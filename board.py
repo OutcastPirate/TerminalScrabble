@@ -2,7 +2,11 @@ from settings import boardSize, boardCharacter
 from field import Field
 from fieldLetters import fieldInt
 from checkDict import getWords
-import os
+from math import floor
+
+
+class NotConnectedError(Exception):
+    pass
 
 
 class WrongWordError(Exception):
@@ -53,8 +57,12 @@ class Board:
                 letters.append(self._fields[field[0]][field[1]]._letter)
             except IndexError:
                 pass
-        print(set(letters))
-        os.system('pause')
+        middle = floor(boardSize / 2)
+        firstTerm = (len(set(letters)) == 1)
+        secondTerm = (list(set(letters))[0] == boardCharacter)
+        thirdTerm = (self._fields[middle][middle]._letter != boardCharacter)
+        if firstTerm and secondTerm and thirdTerm:
+            raise NotConnectedError
         for i in range(len(content)):
             self._fields[row - 1][column + i - 1].setLetter(content[i])
 

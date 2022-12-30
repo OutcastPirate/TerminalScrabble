@@ -2,7 +2,7 @@ from board import Board
 import settings
 from colors import Color
 from fieldLetters import fieldLet
-from board import BoardError
+from board import BoardError, NotConnectedError
 from tiles import tiles
 from tile import TileError
 from player import Player
@@ -242,14 +242,17 @@ class Game:
                             self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
                             print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
                             os.system('pause')
-                    # except IndexError:
-                    #     print("Chosen row/column does not exist")
-                    #     os.system('pause')
+                    except IndexError:
+                        print("Chosen row/column does not exist")
+                        os.system('pause')
                     except FieldError:
                         print("Chosen field is occupied")
                         os.system('pause')
                     except TileError:
                         print("\nAvailable tiles don't match the input.\n")
+                        os.system('pause')
+                    except NotConnectedError:
+                        print("\nAll tiles have to be connected.\n")
                         os.system('pause')
                     break
                 elif turn == 'e':
