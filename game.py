@@ -286,8 +286,3 @@ Bob = Player("Bob")
 scrabble.addPlayer(Jack)
 scrabble.addPlayer(Bob)
 scrabble.play()
-
-# scrabble.horizontalWord('kot', ("B", 2))
-# scrabble.verticalWord("pies", ("C", 9))
-# scrabble.verticalWord("krata", ("A", 6))
-# scrabble.printBoard()

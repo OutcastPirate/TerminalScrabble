@@ -70,6 +70,24 @@ class Board:
         row, column = position
         row = fieldInt(row[0])
         content = content.upper()
+        validate = []
+        validate.append((row - 2, column - 1))
+        for i in range(len(content)):
+            validate.append((row + i - 1, column - 2))
+            validate.append((row + i - 1, column))
+        validate.append((row - 1 + len(content), column - 1))
+        letters = []
+        for field in validate:
+            try:
+                letters.append(self._fields[field[0]][field[1]]._letter)
+            except IndexError:
+                pass
+        middle = floor(boardSize / 2)
+        firstTerm = (len(set(letters)) == 1)
+        secondTerm = (list(set(letters))[0] == boardCharacter)
+        thirdTerm = (self._fields[middle][middle]._letter != boardCharacter)
+        if firstTerm and secondTerm and thirdTerm:
+            raise NotConnectedError
         for i in range(len(content)):
             self._fields[row + i - 1][column - 1].setLetter(content[i])
 
