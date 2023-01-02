@@ -6,6 +6,7 @@ from board import BoardError, NotConnectedError
 from tiles import tiles
 from tile import TileError
 from player import Player
+from bot import Bot
 from math import floor
 from copy import copy
 from field import FieldError
@@ -38,7 +39,10 @@ class Game:
         return self._players
 
     def displayLeaderboard(self):
-        os.system('cls')
+        if (os.name == 'posix'):
+            os.system('clear')
+        else:
+            os.system('cls')
         print('\n')
         print(f'\t{Color.BOLD}{Color.BLU}{"Leaderboard":^30}{Color.ENDC}')
         print(f'\t{Color.BOLD}{"Player":20}{"Points":>10}{Color.ENDC}')
@@ -46,7 +50,7 @@ class Game:
         for player in self._players:
             print(f'\t{player._name:20}{player._points:>10}')
         print('\n' * 5)
-        os.system('pause')
+        input()
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
@@ -180,7 +184,7 @@ class Game:
         positions = chosen.split(',')
         currentPlayer.swapTiles(positions, self._tiles)
         print(f'Your new tiles: {currentPlayer._tileLetters}')
-        os.system('pause')
+        input()
 
     def cancelMoveTurn(self, currentPlayer, tiles):
         self.turnBoards(self._tempBoard, self._board)
@@ -202,9 +206,78 @@ class Game:
         return newWords
 
     def beginGame(self):
-        pass
+        players = []
+        while (True):
+            if (os.name == 'posix'):
+                os.system('clear')
+            else:
+                os.system('cls')
+            print(f'{Color.BOLD}{Color.BLU}{"SCRABBLE":^40}{Color.ENDC}\n')
+            print('p - Add player')
+            print('b - Add AI player (bot)')
+            print('d - Delete player')
+            print('s - Start Game\n')
+            print(f'\t{Color.BOLD}{Color.BLU}{"Players":^20}{Color.ENDC}')
+            print("\t" + f"{Color.BOLD}-{Color.ENDC}" * 20)
+            for index, player in enumerate(self._players):
+                if isinstance(player, Bot):
+                    print(f'\t{index + 1:>2}.{player._name:>14} {Color.GRE}AI{Color.ENDC}')  # noqa: E501
+                else:
+                    print(f'\t{index + 1:>2}.{player._name:>17}')
+            print('\n' * 5)
+            option = input("Choose option: ")
+            if option == 'p' or option == 'b':
+                if len(self._players) == 4:
+                    print("\nCannot add more than 4 players.\n")
+                    input()
+                    continue
+                playerName = input(f"Player {len(self._players) + 1}: ")
+                if playerName == '':
+                    print("\nPlayer's name cannot be empty\n")
+                    input()
+                    continue
+                elif playerName in players:
+                    print("\nPlayer's name has to be unique\n")
+                    input()
+                    continue
+                players.append(playerName)
+                if option == 'p':
+                    newPlayer = Player(playerName)
+                else:
+                    newPlayer = Bot(playerName)
+                self.addPlayer(newPlayer)
+            elif option == 's':
+                if (len(self._players) <= 1):
+                    print('\nCannot start without at least 2 players\n')
+                    input()
+                    continue
+                break
+            elif option == 'd':
+                if len(self._players) == 0:
+                    print("\nThere are no players to remove\n")
+                    input()
+                    continue
+                removeName = input("Remove player: ")
+                if removeName not in players:
+                    print("\nNo such player in game\n")
+                    input()
+                    continue
+                else:
+                    for x in range(len(players)):
+                        if players[x] == removeName:
+                            del players[x]
+                            break
+                    for player in self._players:
+                        if player._name == removeName:
+                            self._players.remove(player)
+                            break
+                    continue
+            else:
+                print("\nWrong option. Choose again.\n")
+                input()
 
     def play(self):
+        self.beginGame()
         for player in self.players:
             player.getStartingTiles(self._tiles)
         gameInProgress = True
@@ -212,9 +285,10 @@ class Game:
         turnIndex = 0
         playerMoveCounter = 0
         while (gameInProgress):
-            os.system('cls')
-            print('.')
-            os.system('cls')
+            if (os.name == 'posix'):
+                os.system('clear')
+            else:
+                os.system('cls')
             self.printTempBoard()
             endTurn = False
             currentPlayer = self._players[playerIndex]
@@ -242,19 +316,19 @@ class Game:
                         if self._tempBoard.getBoard()[middle][middle]._letter == settings.boardCharacter:  # noqa: E501
                             self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
                             print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
-                            os.system('pause')
+                            input()
                     except IndexError:
                         print("Chosen row/column does not exist")
-                        os.system('pause')
+                        input()
                     except FieldError:
                         print("Chosen field is occupied")
-                        os.system('pause')
+                        input()
                     except TileError:
                         print("\nAvailable tiles don't match the input.\n")
-                        os.system('pause')
+                        input()
                     except NotConnectedError:
                         print("\nAll tiles have to be connected.\n")
-                        os.system('pause')
+                        input()
                     break
                 elif turn == 'e':
                     endTurn = True
@@ -282,8 +356,4 @@ class Game:
 
 
 scrabble = Game()
-Jack = Player("Jack")
-Bob = Player("Bob")
-scrabble.addPlayer(Jack)
-scrabble.addPlayer(Bob)
 scrabble.play()
