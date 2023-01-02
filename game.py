@@ -10,6 +10,7 @@ from bot import Bot
 from math import floor
 from copy import copy
 from field import FieldError
+from checkDict import createDict
 import os
 
 
@@ -206,6 +207,7 @@ class Game:
         return newWords
 
     def beginGame(self):
+        createDict()
         players = []
         while (True):
             if (os.name == 'posix'):
