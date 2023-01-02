@@ -269,7 +269,7 @@ class Game:
                             break
                     for player in self._players:
                         if player._name == removeName:
-                            self._players.remove(player)
+                            self.removePlayer(player)
                             break
                     continue
             else:
@@ -307,7 +307,14 @@ class Game:
                 else:
                     turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
                 if turn == 's' and playerMoveCounter == 1:
-                    self.swapTilesTurn(currentPlayer)
+                    try:
+                        self.swapTilesTurn(currentPlayer)
+                    except (ValueError, IndexError):
+                        print('\nWrong format of input\n')  # noqa: E501
+                        input()
+                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+                        playerMoveCounter = 0
+                        break
                     endTurn = True
                 elif turn == 'p':
                     try:
