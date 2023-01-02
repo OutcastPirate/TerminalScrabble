@@ -304,7 +304,10 @@ class Game:
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
                 playerMoveCounter += 1
-                if playerMoveCounter == 1:
+                if isinstance(currentPlayer, Bot):
+                    currentPlayer.makeMove(self._tempBoard, self._board)
+                    turn = 'e'
+                elif playerMoveCounter == 1:
                     turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
                 else:
                     turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
@@ -328,6 +331,7 @@ class Game:
                             input()
                     except IndexError:
                         print("Chosen row/column does not exist")
+                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                         input()
                     except FieldError:
                         print("Chosen field is occupied")
