@@ -178,8 +178,6 @@ class Game:
         print("Format: '1,2,3' -> swap the first three tiles")
         chosen = input("Wchich tiles do you want to swap: ")
         positions = chosen.split(',')
-        for number in positions:
-            number = int(number)
         currentPlayer.swapTiles(positions, self._tiles)
         print(f'Your new tiles: {currentPlayer._tileLetters}')
         os.system('pause')
@@ -202,6 +200,9 @@ class Game:
             if word not in boardWords:
                 newWords.append(word)
         return newWords
+
+    def beginGame(self):
+        pass
 
     def play(self):
         for player in self.players:
