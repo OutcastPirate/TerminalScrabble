@@ -361,6 +361,13 @@ class Game:
                         playerIndex = (playerIndex + 1) % len(self.players)
                         playerMoveCounter = 0
                         turnIndex += 1
+                        if isinstance(currentPlayer, Bot):
+                            if (os.name == 'posix'):
+                                os.system('clear')
+                            else:
+                                os.system('cls')
+                            self.printTempBoard()
+                            input()
                         if playerIndex == 0:
                             self.displayLeaderboard()
                         break

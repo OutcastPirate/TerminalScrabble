@@ -19,6 +19,3 @@ def createDict():
 def getWords(letter):
     letter = letter.upper()
     return newDict[letter]
-
-
-# print(getWords('a'))
