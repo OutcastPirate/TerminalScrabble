@@ -11,6 +11,7 @@ from math import floor
 from copy import copy
 from field import FieldError
 from checkDict import createDict
+from random import choice
 import os
 
 
@@ -147,29 +148,35 @@ class Game:
                 break
 
     def placeTilesTurn(self, currentPlayer):
-        print("\nFormat: coordinates separated with a blank space")
-        print('With multiple tiles: 1 A - write down / A 1 - write right\n')
-        field = input('Choose input field: ')
-        position = field.split(' ')
-        try:
-            row = position[0]
-            column = int(position[1])
-            direction = 'right'
-        except ValueError:
-            row = position[1]
-            column = int(position[0])
-            direction = 'down'
-        rows = []
-        for i in range(settings.boardSize + 1):
-            rows.append(fieldLet(i+1))
-        if column <= 0 or column > settings.boardSize or row not in rows:
-            raise IndexError("Coords out of bounds")
-        coords = (row, column)
-        word = input("Choose tile(s): ")
-        word = word.upper()
-        for letter in word:
-            if letter not in currentPlayer._tileLetters:
-                raise TileError
+        if not isinstance(currentPlayer, Bot):
+            print("\nFormat: coordinates separated with a blank space")
+            print('Multiple tiles: 1 A - write down / A 1 - write right\n')
+            field = input('Choose input field: ')
+            position = field.split(' ')
+            try:
+                row = position[0]
+                column = int(position[1])
+                direction = 'right'
+            except ValueError:
+                row = position[1]
+                column = int(position[0])
+                direction = 'down'
+            rows = []
+            for i in range(settings.boardSize + 1):
+                rows.append(fieldLet(i+1))
+            if column <= 0 or column > settings.boardSize or row not in rows:
+                raise IndexError("Coords out of bounds")
+            coords = (row, column)
+            word = input("Choose tile(s): ")
+            word = word.upper()
+            for letter in word:
+                if letter not in currentPlayer._tileLetters:
+                    raise TileError
+        else:
+            move = choice(currentPlayer._moves)
+            word = move[0][1:]
+            direction = move[3]
+            coords = (fieldLet(move[2][0] + 1), move[2][1] + 1)
         if direction == 'down':
             self.verticalWord(word, coords)
         elif direction == 'right':
@@ -305,8 +312,10 @@ class Game:
             while True:
                 playerMoveCounter += 1
                 if isinstance(currentPlayer, Bot):
-                    currentPlayer.makeMove(self._tempBoard, self._board)
-                    turn = 'e'
+                    if playerMoveCounter == 2:
+                        turn = 'e'
+                    else:
+                        turn = 'p'
                 elif playerMoveCounter == 1:
                     turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
                 else:
@@ -322,6 +331,8 @@ class Game:
                         break
                     endTurn = True
                 elif turn == 'p':
+                    if isinstance(currentPlayer, Bot):
+                        currentPlayer.makeMove(self._tempBoard, self._board)  # noqa: E501
                     try:
                         self.placeTilesTurn(currentPlayer)
                         middle = floor(settings.boardSize / 2)
