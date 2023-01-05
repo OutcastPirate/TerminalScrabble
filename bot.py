@@ -31,20 +31,21 @@ class Bot(Player):
 
     def makeMove(self, board, ref):
         self._moves = []
-        words = sorted(self.checkOwnWords())
+        # words = sorted(self.checkOwnWords())
+        words = self.checkOwnWords()
         if len(words) > 0:
-            bestWord = words[0]
+            # bestWord = words[0]
+            bestWord = max(words, key=words.get)
         mid = floor(boardSize / 2)
         moves = []
         if board._fields[mid][mid]._letter == boardCharacter:
-            moves.append([bestWord, 0, (mid, mid), choice(("right", "down"))])
+            moves.append([" " + bestWord, 0, (mid, mid), choice(["right", "down"])])  # noqa: E501
         else:
             for i in range(boardSize):
-                stop = False
                 for j in range(boardSize):
                     possible = {}
                     freeFields = 0
-                    if board._fields[i][j]._letter != boardCharacter and board._fields[i][j - 1]._letter == boardCharacter:  # noqa: E501
+                    if board._fields[i][j]._letter != boardCharacter and board._fields[i][j - 1]._letter == boardCharacter and board._fields[i][j + 1]._letter != boardCharacter:  # noqa: E501
                         for x in range(maxWordLength):
                             if board._fields[i][j + x] == boardCharacter:
                                 freeFields += 1
@@ -59,10 +60,6 @@ class Bot(Player):
                                 if letter in tiles:
                                     index = tiles.index(letter)
                                     del tiles[index]
-                                    # try:
-                                    #     del self._tiles[index]
-                                    # except IndexError:
-                                    #     pass
                                     counter += 1
                             if counter == len(word) and word not in possible.keys():  # noqa: E501
                                 possible[word] = 0
@@ -78,6 +75,4 @@ class Bot(Player):
 
                                 except (NotConnectedError, FieldError, BoardError):  # noqa: E501
                                     pass
-                if stop:
-                    break
         self._moves = moves

@@ -312,7 +312,7 @@ class Game:
             while True:
                 playerMoveCounter += 1
                 if isinstance(currentPlayer, Bot):
-                    if playerMoveCounter == 2:
+                    if playerMoveCounter >= 2:
                         turn = 'e'
                     else:
                         turn = 'p'
