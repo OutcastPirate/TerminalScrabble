@@ -3,7 +3,7 @@ from checkDict import newDict
 from copy import copy
 from pointTable import pointTable
 from math import floor
-from settings import boardSize, boardCharacter, maxWordLength
+from settings import boardSize, boardCharacter as BCHAR, maxWordLength
 from random import choice
 from board import NotConnectedError, BoardError
 from field import FieldError
@@ -38,16 +38,16 @@ class Bot(Player):
             bestWord = max(words, key=words.get)
         mid = floor(boardSize / 2)
         moves = []
-        if board._fields[mid][mid]._letter == boardCharacter:
+        if board._fields[mid][mid]._letter == BCHAR:
             moves.append([" " + bestWord, 0, (mid, mid), choice(["right", "down"])])  # noqa: E501
         else:
             for i in range(boardSize):
                 for j in range(boardSize):
                     possible = {}
                     freeFields = 0
-                    if board._fields[i][j]._letter != boardCharacter and board._fields[i][j - 1]._letter == boardCharacter and board._fields[i][j + 1]._letter != boardCharacter:  # noqa: E501
+                    if board._fields[i][j]._letter != BCHAR and board._fields[i][j - 1]._letter == BCHAR and board._fields[i][j + 1]._letter == BCHAR:  # noqa: E501
                         for x in range(maxWordLength):
-                            if board._fields[i][j + x] == boardCharacter:
+                            if board._fields[i][j + x] == BCHAR:
                                 freeFields += 1
                             else:
                                 break
@@ -65,7 +65,8 @@ class Bot(Player):
                                 possible[word] = 0
                                 for letter in word:
                                     possible[word] += pointTable[letter]
-                                moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
+                                if board._fields[i][j]._letter != BCHAR:
+                                    moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
                             if len(possible) > 0:
                                 try:
                                     if not board.validateBoard():

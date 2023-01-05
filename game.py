@@ -159,7 +159,10 @@ class Game:
                 direction = 'right'
             except ValueError:
                 row = position[1]
-                column = int(position[0])
+                try:
+                    column = int(position[0])
+                except ValueError:
+                    raise IndexError
                 direction = 'down'
             rows = []
             for i in range(settings.boardSize + 1):
@@ -285,6 +288,20 @@ class Game:
                 print("\nWrong option. Choose again.\n")
                 input()
 
+    def endTurn(self, currentPlayer):
+        if not self._tempBoard.validateBoard():
+            raise BoardError()
+        currentPlayer.givePoints(self.checkNewWords())
+        self.turnBoards(self._board, self._tempBoard)
+        currentPlayer.reloadTiles(self._tiles)
+        if isinstance(currentPlayer, Bot):
+            if (os.name == 'posix'):
+                os.system('clear')
+            else:
+                os.system('cls')
+            self.printTempBoard()
+            input()
+
     def play(self):
         self.beginGame()
         for player in self.players:
@@ -364,26 +381,17 @@ class Game:
                     print("Wrong move, choose again: ")
                 if endTurn:
                     try:
-                        if not self._tempBoard.validateBoard():
-                            raise BoardError()
-                        currentPlayer.givePoints(self.checkNewWords())
-                        self.turnBoards(self._board, self._tempBoard)
-                        currentPlayer.reloadTiles(self._tiles)
+                        self.endTurn(currentPlayer)
                         playerIndex = (playerIndex + 1) % len(self.players)
                         playerMoveCounter = 0
                         turnIndex += 1
-                        if isinstance(currentPlayer, Bot):
-                            if (os.name == 'posix'):
-                                os.system('clear')
-                            else:
-                                os.system('cls')
-                            self.printTempBoard()
-                            input()
                         if playerIndex == 0:
                             self.displayLeaderboard()
                         break
                     except BoardError:
                         print("Current board layout is incorrect")
+                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+                        input()
 
 
 scrabble = Game()
