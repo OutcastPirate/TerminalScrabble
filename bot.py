@@ -5,8 +5,6 @@ from pointTable import pointTable
 from math import floor
 from settings import boardSize, boardCharacter as BCHAR, maxWordLength
 from random import choice
-from board import NotConnectedError, BoardError
-from field import FieldError
 
 
 class Bot(Player):
@@ -15,12 +13,12 @@ class Bot(Player):
         possible = {}
         for letter in self._tileLetters:
             for word in newDict[letter]:
-                availableTiles = copy(self._tileLetters)
+                avTiles = copy(self._tileLetters)
                 counter = 0
                 word = word.upper()
                 for letter in word:
-                    if letter in availableTiles:
-                        del availableTiles[availableTiles.index(letter)]
+                    if letter in avTiles:
+                        del avTiles[avTiles.index(letter)]
                         counter += 1
                 if counter == len(word):
                     possible[word] = 0
@@ -67,13 +65,5 @@ class Bot(Player):
                                     possible[word] += pointTable[letter]
                                 if board._fields[i][j]._letter != BCHAR:
                                     moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
-                            if len(possible) > 0:
-                                try:
-                                    if not board.validateBoard():
-                                        raise BoardError()
 
-                                    # board.insertHorizontal(sorted(possible)[0], (fieldLet(i + 1), j + 1), ref)  # noqa: E501
-
-                                except (NotConnectedError, FieldError, BoardError):  # noqa: E501
-                                    pass
         self._moves = moves

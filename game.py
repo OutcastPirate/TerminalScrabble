@@ -109,43 +109,27 @@ class Game:
                     print(f'{Color.GRE} {field.letter} {Color.ENDC}', end='\t')
             print('\n')
 
-    def placeTilesTurnBackup(self, currentPlayer):
-        row = input("Choose row: ")
-        column = int(input("Choose column: "))
-        rows = []
-        for i in range(settings.boardSize):
-            rows.append(fieldLet(i+1))
-        if column not in range(1, settings.boardSize + 1) or row not in rows:
-            raise IndexError
-        position = (row, column)
-        word = input("Choose tile(s): ")
-        word = word.upper()
-        for letter in word:
-            if letter not in currentPlayer._tileLetters:
-                raise TileError
-        while True:
-            direction = input("Direction => down/right: ")
-            if direction == 'down':
-                self.verticalWord(word, position)
-                break
-            elif direction == 'right':
-                self.horizontalWord(word, position)
-                break
-            else:
-                print("Wrong direction, choose again: ")
-        while True:
-            counter = 0
-            for letter in word:
-                if letter not in currentPlayer._tileLetters:
-                    word = input("Invalid tiles, choose again: ")
-                    continue
-                else:
-                    tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
-                    del currentPlayer._tiles[tileIndex]
-                    del currentPlayer._tileLetters[tileIndex]
-                    counter += 1
-            if counter == len(word):
-                break
+    def placeTilesCheck(self, currentPlayer, cancelTurn):
+        try:      
+            self.placeTilesTurn(currentPlayer)
+            middle = floor(settings.boardSize / 2)
+            if self._tempBoard.getBoard()[middle][middle]._letter == settings.boardCharacter:  # noqa: E501
+                self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
+                print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
+                input()
+        except IndexError:
+            print("Chosen row/column does not exist")
+            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+            input()
+        except FieldError:
+            print("Chosen field is occupied")
+            input()
+        except TileError:
+            print("\nAvailable tiles don't match the input.\n")
+            input()
+        except NotConnectedError:
+            print("\nAll tiles have to be connected.\n")
+            input()
 
     def placeTilesTurn(self, currentPlayer):
         if not isinstance(currentPlayer, Bot):
@@ -350,26 +334,7 @@ class Game:
                 elif turn == 'p':
                     if isinstance(currentPlayer, Bot):
                         currentPlayer.makeMove(self._tempBoard, self._board)  # noqa: E501
-                    try:
-                        self.placeTilesTurn(currentPlayer)
-                        middle = floor(settings.boardSize / 2)
-                        if self._tempBoard.getBoard()[middle][middle]._letter == settings.boardCharacter:  # noqa: E501
-                            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
-                            print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
-                            input()
-                    except IndexError:
-                        print("Chosen row/column does not exist")
-                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                        input()
-                    except FieldError:
-                        print("Chosen field is occupied")
-                        input()
-                    except TileError:
-                        print("\nAvailable tiles don't match the input.\n")
-                        input()
-                    except NotConnectedError:
-                        print("\nAll tiles have to be connected.\n")
-                        input()
+                    self.placeTilesCheck(currentPlayer, cancelTurn)
                     break
                 elif turn == 'e':
                     endTurn = True
@@ -389,9 +354,11 @@ class Game:
                             self.displayLeaderboard()
                         break
                     except BoardError:
-                        print("Current board layout is incorrect")
-                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                        input()
+                        if isinstance(currentPlayer, Bot):
+                            self.turnBoards(self._tempBoard, self._board)
+                        else: 
+                            print("Current board layout is incorrect")
+                            input()
 
 
 scrabble = Game()
