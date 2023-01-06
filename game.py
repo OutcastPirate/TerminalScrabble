@@ -1,4 +1,4 @@
-from board import Board
+from board import Board, WrongWordError
 from settings import boardCharacter as BCHAR
 from settings import boardSize as BSIZE
 from colors import Color as C
@@ -78,13 +78,6 @@ class Game:
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
-        # if not self._tempBoard.validateBoard():
-        #     raise BoardError(f"{content} on {position} does not match board")
-        #     # print(f"{content} on {position} does not match current board")
-        # else:
-        #     pass
-        #     self._board.insertHorizontal(content, position)
-        pass
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position, self._board)
@@ -116,19 +109,27 @@ class Game:
                 self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                 print('\nFirst tile has to be placed on the middle field. \n')
                 input()
-        # except IndexError:
-        #     print("Chosen field out of bounds")
-        #     self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-        #     input()
+        except IndexError:
+            print("Chosen field out of bounds")
+            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+            input()
         except FieldError:
-            print("Chosen field is occupied")
-            input()
+            if not isinstance(currentPlayer, Bot):
+                print("Chosen field is occupied")
+                input()
         except TileError:
-            print("\nAvailable tiles don't match the input.\n")
-            input()
+            if not isinstance(currentPlayer, Bot):
+                print("\nAvailable tiles don't match the input.\n")
+                input()
         except NotConnectedError:
-            print("\nAll tiles have to be connected.\n")
-            input()
+            if not isinstance(currentPlayer, Bot):
+                print("\nAll tiles have to be connected.\n")
+                input()
+        except WrongWordError:
+            if not isinstance(currentPlayer, Bot):
+                print("Word goes out of bounds")
+                input()
+            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
 
     def placeTilesTurn(self, currentPlayer):
         if not isinstance(currentPlayer, Bot):
@@ -298,6 +299,7 @@ class Game:
         turnsSkipped = 0
         gameInProgress = True
         playerIndex = 0
+        botEnd = 0
         turnIndex = 0
         playerMoveCounter = 0
         ENDGAME = False
@@ -317,7 +319,7 @@ class Game:
                     'tiles': copy(currentPlayer._tiles),
                     'board': copy(self._board)
                 }
-            endTerm1 = len(currentPlayer._tiles) == 0
+            endTerm1 = playerIndex == 0
             endTerm2 = len(self._tiles) == 0
             if endTerm1 and endTerm2:
                 ENDGAME = True
@@ -333,6 +335,7 @@ class Game:
                         if botCancel:
                             turn = 'c'
                         else:
+                            turnsSkipped = 0
                             turn = 'e'
                     else:
                         turn = 'p'
@@ -361,6 +364,8 @@ class Game:
                 elif turn == 'e':
                     if playerMoveCounter == 1:
                         turnsSkipped += 1
+                    else:
+                        turnsSkipped = 0
                     endTurn = True
                 elif turn == 'c':
                     self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
@@ -373,7 +378,7 @@ class Game:
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
-                    if turnsSkipped == len(self._players) * 2:
+                    if turnsSkipped == len(self._players) * 2 or botEnd == 20:
                         ENDGAME = True
                     try:
                         self.endTurn(currentPlayer)
@@ -386,7 +391,7 @@ class Game:
                     except BoardError:
                         if isinstance(currentPlayer, Bot):
                             self.turnBoards(self._tempBoard, self._board)
-                            turnsSkipped += 1
+                            botEnd += 1
                             botCancel = True
                         else:
                             print("Current board layout is incorrect")
