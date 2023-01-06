@@ -47,9 +47,9 @@ class Game:
         else:
             os.system('cls')
         print('\n')
-        print(f'\t{C.BOLD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
-        print(f'\t{C.BOLD}{"Player":20}{"Points":>10}{C.ENDC}')
-        print("\t" + f"{C.BOLD}-{C.ENDC}" * 30)
+        print(f'\t{C.BD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
+        print(f'\t{C.BD}{"Player":20}{"Points":>10}{C.ENDC}')
+        print("\t" + f"{C.BD}-{C.ENDC}" * 30)
         for player in self._players:
             print(f'\t{player._name:20}{player._points:>10}')
         print('\n' * 5)
@@ -61,11 +61,11 @@ class Game:
         else:
             os.system('cls')
         print('\n')
-        print(f'\t{C.BOLD}{C.RED}{"THE GAME ENDED":^30}{C.ENDC}')
+        print(f'\t{C.BD}{C.RED}{"THE GAME ENDED":^30}{C.ENDC}')
         print('\n')
-        print(f'\t{C.BOLD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
-        print(f'\t{C.BOLD}{"Player":20}{"Points":>10}{C.ENDC}')
-        print("\t" + f"{C.BOLD}-{C.ENDC}" * 30)
+        print(f'\t{C.BD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
+        print(f'\t{C.BD}{"Player":20}{"Points":>10}{C.ENDC}')
+        print("\t" + f"{C.BD}-{C.ENDC}" * 30)
         for player in self._players:
             print(f'\t{player._name:20}{player._points:>10}')
         print('\n' * 2)
@@ -84,17 +84,18 @@ class Game:
 
     def printTempBoard(self):
         for i in range(BSIZE+1):
-            print(f'{C.BOLD} {i} {C.ENDC}', end="\t")
+            print(f'{C.BD} {i} {C.ENDC}', end="\t")
         print('\n')
         for i in range(BSIZE):
-            print(f'{C.BOLD} {fieldLet(i+1)}{C.ENDC}', end="\t")
+            print(f'{C.BD} {fieldLet(i+1)}{C.ENDC}', end="\t")
             for field in self._tempBoard.getBoard()[i]:
                 middle = floor(BSIZE / 2)
                 if field == self._tempBoard.getBoard()[middle][middle]:
+                    format = C.MID + C.BD
                     if field.letter == BCHAR:
-                        print(f'{C.MID}{C.BOLD}{field.letter}{C.ENDC}', end='\t')  # noqa: E501
+                        print(f'{format}{field.letter}{C.ENDC}', end='\t')
                     else:
-                        print(f'{C.MID}{C.BOLD} {field.letter} {C.ENDC}', end='\t')  # noqa: E501
+                        print(f'{format} {field.letter} {C.ENDC}', end='\t')
                 elif field.letter == BCHAR:
                     print(f'{C.RED}{field.letter}{C.ENDC}', end='\t')
                 else:
@@ -175,7 +176,7 @@ class Game:
             except IndexError:
                 return
         for letter in word:
-            tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
+            tileIndex = currentPlayer._tileLetters.index(letter)
             del currentPlayer._tiles[tileIndex]
             del currentPlayer._tileLetters[tileIndex]
 
@@ -214,16 +215,17 @@ class Game:
                 os.system('clear')
             else:
                 os.system('cls')
-            print(f'{C.BOLD}{C.BLU}{"SCRABBLE":^40}{C.ENDC}\n')
+            print(f'{C.BD}{C.BLU}{"SCRABBLE":^40}{C.ENDC}\n')
             print('p - Add player')
             print('b - Add AI player (bot)')
             print('d - Delete player')
             print('s - Start Game\n')
-            print(f'\t{C.BOLD}{C.BLU}{"Players":^20}{C.ENDC}')
-            print("\t" + f"{C.BOLD}-{C.ENDC}" * 20)
+            print(f'\t{C.BD}{C.BLU}{"Players":^20}{C.ENDC}')
+            print("\t" + f"{C.BD}-{C.ENDC}" * 20)
             for index, player in enumerate(self._players):
                 if isinstance(player, Bot):
-                    print(f'\t{index + 1:>2}.{player._name:>14} {C.GRE}AI{C.ENDC}')  # noqa: E501
+                    name = player._name
+                    print(f'\t{index + 1:>2}.{name:>14} {C.GRE}AI{C.ENDC}')
                 else:
                     print(f'\t{index + 1:>2}.{player._name:>17}')
             print('\n' * 5)
