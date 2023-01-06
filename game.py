@@ -88,29 +88,6 @@ class Game:
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position, self._board)
-        # if not self._tempBoard.validateBoard():
-        #     raise BoardError(f"{content} on {position} does not match board")
-        #     # print(f"{content} on {position} does not match current board")
-        # else:
-        #     pass
-        #     self._board.insertVertical(content, position)
-        pass
-
-    def printBoard(self):
-        for i in range(BSIZE+1):
-            print(f'{C.BOLD}{i}{C.ENDC}', end="")
-        print('\n')
-        for i in range(BSIZE):
-            print(f'{C.BOLD}{fieldLet(i+1)}{C.ENDC}', end="\t")
-            for field in self.gameBoard.getBoard()[i]:
-                middle = floor(BSIZE / 2)
-                if field == self.gameBoard.getBoard()[middle][middle]:
-                    print(f'{C.MID}{C.BOLD}{field.letter}{C.ENDC}', end='\t')
-                elif field.letter == BCHAR:
-                    print(f'{C.RED}{field.letter}{C.ENDC}', end='\t')
-                else:
-                    print(f'{C.GRE}{field.letter}{C.ENDC}', end='\t')
-            print('\n')
 
     def printTempBoard(self):
         for i in range(BSIZE+1):
@@ -409,6 +386,7 @@ class Game:
                     except BoardError:
                         if isinstance(currentPlayer, Bot):
                             self.turnBoards(self._tempBoard, self._board)
+                            turnsSkipped += 1
                             botCancel = True
                         else:
                             print("Current board layout is incorrect")
