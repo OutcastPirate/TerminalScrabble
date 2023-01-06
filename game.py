@@ -55,6 +55,27 @@ class Game:
         print('\n' * 5)
         input()
 
+    def displayFinalPoints(self):
+        if (os.name == 'posix'):
+            os.system('clear')
+        else:
+            os.system('cls')
+        print('\n')
+        print(f'\t{C.BOLD}{C.RED}{"THE GAME ENDED":^30}{C.ENDC}')
+        print('\n')
+        print(f'\t{C.BOLD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
+        print(f'\t{C.BOLD}{"Player":20}{"Points":>10}{C.ENDC}')
+        print("\t" + f"{C.BOLD}-{C.ENDC}" * 30)
+        for player in self._players:
+            print(f'\t{player._name:20}{player._points:>10}')
+        print('\n' * 2)
+        if self._winner._points != 0:
+            print(f'{C.MID}{self._winner._name} won! Congratulations!{C.ENDC}')
+        else:
+            print(f'{C.MID}It was a draw!{C.ENDC}')
+        print('\n' * 4)
+        input()
+
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
         # if not self._tempBoard.validateBoard():
@@ -166,9 +187,15 @@ class Game:
             direction = move[3]
             coords = (fieldLet(move[2][0] + 1), move[2][1] + 1)
         if direction == 'down':
-            self.verticalWord(word, coords)
+            try:
+                self.verticalWord(word, coords)
+            except IndexError:
+                return
         elif direction == 'right':
-            self.horizontalWord(word, coords)
+            try:
+                self.horizontalWord(word, coords)
+            except IndexError:
+                return
         for letter in word:
             tileIndex = currentPlayer._tileLetters.index(letter)  # noqa: E501
             del currentPlayer._tiles[tileIndex]
@@ -291,31 +318,45 @@ class Game:
         self.beginGame()
         for player in self.players:
             player.getStartingTiles(self._tiles)
+        turnsSkipped = 0
         gameInProgress = True
         playerIndex = 0
         turnIndex = 0
         playerMoveCounter = 0
+        ENDGAME = False
         while (gameInProgress):
+            if ENDGAME:
+                break
             if (os.name == 'posix'):
                 os.system('clear')
             else:
                 os.system('cls')
             self.printTempBoard()
             endTurn = False
+            botCancel = False
             currentPlayer = self._players[playerIndex]
             if playerMoveCounter == 0:
                 cancelTurn = {
                     'tiles': copy(currentPlayer._tiles),
                     'board': copy(self._board)
                 }
+            endTerm1 = len(currentPlayer._tiles) == 0
+            endTerm2 = len(self._tiles) == 0
+            if endTerm1 and endTerm2:
+                ENDGAME = True
             print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{currentPlayer._name}'s turn")
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
+                if ENDGAME:
+                    break
                 playerMoveCounter += 1
                 if isinstance(currentPlayer, Bot):
                     if playerMoveCounter >= 2:
-                        turn = 'e'
+                        if botCancel:
+                            turn = 'c'
+                        else:
+                            turn = 'e'
                     else:
                         turn = 'p'
                 elif playerMoveCounter == 1:
@@ -335,17 +376,28 @@ class Game:
                 elif turn == 'p':
                     if isinstance(currentPlayer, Bot):
                         currentPlayer.makeMove(self._tempBoard, self._board)
+                        if len(currentPlayer._moves) == 0:
+                            endTurn = True
+                            break
                     self.placeTilesCheck(currentPlayer, cancelTurn)
                     break
                 elif turn == 'e':
+                    if playerMoveCounter == 1:
+                        turnsSkipped += 1
                     endTurn = True
                 elif turn == 'c':
                     self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                     playerMoveCounter = 0
+                    botCancel = False
+                    if isinstance(currentPlayer, Bot):
+                        playerMoveCounter = 2
+                        endTurn = True
                     break
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
+                    if turnsSkipped == len(self._players) * 2:
+                        ENDGAME = True
                     try:
                         self.endTurn(currentPlayer)
                         playerIndex = (playerIndex + 1) % len(self.players)
@@ -357,9 +409,17 @@ class Game:
                     except BoardError:
                         if isinstance(currentPlayer, Bot):
                             self.turnBoards(self._tempBoard, self._board)
+                            botCancel = True
                         else:
                             print("Current board layout is incorrect")
                             input()
+        self._winner = Player('')
+        for player in self._players:
+            if player._points > self._winner._points:
+                self._winner = player
+            elif player._points == self._winner._points:
+                self._winner._points = 0
+        self.displayFinalPoints()
 
 
 scrabble = Game()

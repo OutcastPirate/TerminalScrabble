@@ -3,7 +3,7 @@ from checkDict import newDict
 from copy import copy
 from pointTable import pointTable
 from math import floor
-from settings import boardSize, boardCharacter as BCHAR, maxWordLength
+from settings import boardSize as BSIZE, boardCharacter as BCHAR, maxWordLength
 from random import choice
 
 
@@ -37,8 +37,8 @@ class Bot(Player):
         return words
 
     def checkRightHorizontalMoves(self, board):
-        for i in range(boardSize):
-            for j in range(boardSize):
+        for i in range(BSIZE):
+            for j in range(BSIZE):
                 possible = {}
                 freeFields = 0
                 try:
@@ -73,8 +73,8 @@ class Bot(Player):
                                 self._moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
 
     def checkVerticalMoves(self, board):
-        for i in range(boardSize):
-            for j in range(boardSize):
+        for i in range(BSIZE):
+            for j in range(BSIZE):
                 possible = {}
                 freeFields = 0
                 try:
@@ -113,8 +113,8 @@ class Bot(Player):
 
         Checks for possible moves where the last letter is already on the board
         """
-        for i in range(boardSize):
-            for j in range(boardSize):
+        for i in range(BSIZE):
+            for j in range(BSIZE):
                 possible = {}
                 freeFields = 0
                 try:
@@ -147,7 +147,14 @@ class Bot(Player):
                             for letter in word:
                                 possible[word] += pointTable[letter]
                             if board._fields[i][j]._letter != BCHAR:
-                                self._moves.append([" " + word[0:-1], possible[word], (i, j - len(word) + 1), "right"])  # noqa: E501
+                                text = " " + word[0:-1]
+                                pts = possible[word]
+                                indexTerm = (j - len(word) + 1) in range(BSIZE)
+                                if indexTerm:
+                                    pos = (i, j - len(word) + 1)
+                                else:
+                                    continue
+                                self._moves.append([text, pts, pos, "right"])
 
     def checkInvVerMoves(self, board):
         """
@@ -155,8 +162,8 @@ class Bot(Player):
 
         Checks for possible moves where the last letter is already on the board
         """
-        for i in range(boardSize):
-            for j in range(boardSize):
+        for i in range(BSIZE):
+            for j in range(BSIZE):
                 possible = {}
                 freeFields = 0
                 try:
@@ -189,7 +196,14 @@ class Bot(Player):
                             for letter in word:
                                 possible[word] += pointTable[letter]
                             if board._fields[i][j]._letter != BCHAR:
-                                self._moves.append([" " + word[0:-1], possible[word], (i - len(word) + 1, j), "down"])  # noqa: E501
+                                text = " " + word[0:-1]
+                                indexTerm = (i - len(word) + 1) in range(BSIZE)
+                                if indexTerm:
+                                    coords = (i - len(word) + 1, j)
+                                else:
+                                    continue
+                                pts = possible[word]
+                                self._moves.append([text, pts, coords, "down"])
 
     def makeMove(self, board, ref):
         self._moves = []
@@ -198,7 +212,7 @@ class Bot(Player):
         if len(words) > 0:
             # bestWord = words[0]
             bestWord = max(words, key=words.get)
-        mid = floor(boardSize / 2)
+        mid = floor(BSIZE / 2)
         if board._fields[mid][mid]._letter == BCHAR:
             word = " " + bestWord
             direction = choice(["right", "down"])
