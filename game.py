@@ -1,6 +1,7 @@
 from board import Board
-import settings
-from colors import Color
+from settings import boardCharacter as BCHAR
+from settings import boardSize as BSIZE
+from colors import Color as C
 from fieldLetters import fieldLet
 from board import BoardError, NotConnectedError
 from tiles import tiles
@@ -46,9 +47,9 @@ class Game:
         else:
             os.system('cls')
         print('\n')
-        print(f'\t{Color.BOLD}{Color.BLU}{"Leaderboard":^30}{Color.ENDC}')
-        print(f'\t{Color.BOLD}{"Player":20}{"Points":>10}{Color.ENDC}')
-        print("\t" + f"{Color.BOLD}-{Color.ENDC}" * 30)
+        print(f'\t{C.BOLD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
+        print(f'\t{C.BOLD}{"Player":20}{"Points":>10}{C.ENDC}')
+        print("\t" + f"{C.BOLD}-{C.ENDC}" * 30)
         for player in self._players:
             print(f'\t{player._name:20}{player._points:>10}')
         print('\n' * 5)
@@ -75,52 +76,52 @@ class Game:
         pass
 
     def printBoard(self):
-        for i in range(settings.boardSize+1):
-            print(f'{Color.BOLD}{i}{Color.ENDC}', end="")
+        for i in range(BSIZE+1):
+            print(f'{C.BOLD}{i}{C.ENDC}', end="")
         print('\n')
-        for i in range(settings.boardSize):
-            print(f'{Color.BOLD}{fieldLet(i+1)}{Color.ENDC}', end="\t")
+        for i in range(BSIZE):
+            print(f'{C.BOLD}{fieldLet(i+1)}{C.ENDC}', end="\t")
             for field in self.gameBoard.getBoard()[i]:
-                middle = floor(settings.boardSize / 2)
+                middle = floor(BSIZE / 2)
                 if field == self.gameBoard.getBoard()[middle][middle]:
-                    print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
-                elif field.letter == settings.boardCharacter:
-                    print(f'{Color.RED}{field.letter}{Color.ENDC}', end='\t')
+                    print(f'{C.MID}{C.BOLD}{field.letter}{C.ENDC}', end='\t')
+                elif field.letter == BCHAR:
+                    print(f'{C.RED}{field.letter}{C.ENDC}', end='\t')
                 else:
-                    print(f'{Color.GRE}{field.letter}{Color.ENDC}', end='\t')
+                    print(f'{C.GRE}{field.letter}{C.ENDC}', end='\t')
             print('\n')
 
     def printTempBoard(self):
-        for i in range(settings.boardSize+1):
-            print(f'{Color.BOLD} {i} {Color.ENDC}', end="\t")
+        for i in range(BSIZE+1):
+            print(f'{C.BOLD} {i} {C.ENDC}', end="\t")
         print('\n')
-        for i in range(settings.boardSize):
-            print(f'{Color.BOLD} {fieldLet(i+1)}{Color.ENDC}', end="\t")
+        for i in range(BSIZE):
+            print(f'{C.BOLD} {fieldLet(i+1)}{C.ENDC}', end="\t")
             for field in self._tempBoard.getBoard()[i]:
-                middle = floor(settings.boardSize / 2)
+                middle = floor(BSIZE / 2)
                 if field == self._tempBoard.getBoard()[middle][middle]:
-                    if field.letter == settings.boardCharacter:
-                        print(f'{Color.MID}{Color.BOLD}{field.letter}{Color.ENDC}', end='\t')  # noqa: E501
+                    if field.letter == BCHAR:
+                        print(f'{C.MID}{C.BOLD}{field.letter}{C.ENDC}', end='\t')  # noqa: E501
                     else:
-                        print(f'{Color.MID}{Color.BOLD} {field.letter} {Color.ENDC}', end='\t')  # noqa: E501
-                elif field.letter == settings.boardCharacter:
-                    print(f'{Color.RED}{field.letter}{Color.ENDC}', end='\t')
+                        print(f'{C.MID}{C.BOLD} {field.letter} {C.ENDC}', end='\t')  # noqa: E501
+                elif field.letter == BCHAR:
+                    print(f'{C.RED}{field.letter}{C.ENDC}', end='\t')
                 else:
-                    print(f'{Color.GRE} {field.letter} {Color.ENDC}', end='\t')
+                    print(f'{C.GRE} {field.letter} {C.ENDC}', end='\t')
             print('\n')
 
     def placeTilesCheck(self, currentPlayer, cancelTurn):
-        try:      
+        try:
             self.placeTilesTurn(currentPlayer)
-            middle = floor(settings.boardSize / 2)
-            if self._tempBoard.getBoard()[middle][middle]._letter == settings.boardCharacter:  # noqa: E501
-                self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])  # noqa: E501
-                print('\nFirst tile has to be placed on the middle field. \n')  # noqa: E501
+            middle = floor(BSIZE / 2)
+            if self._tempBoard.getBoard()[middle][middle]._letter == BCHAR:
+                self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+                print('\nFirst tile has to be placed on the middle field. \n')
                 input()
-        except IndexError:
-            print("Chosen row/column does not exist")
-            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-            input()
+        # except IndexError:
+        #     print("Chosen field out of bounds")
+        #     self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+        #     input()
         except FieldError:
             print("Chosen field is occupied")
             input()
@@ -149,9 +150,9 @@ class Game:
                     raise IndexError
                 direction = 'down'
             rows = []
-            for i in range(settings.boardSize + 1):
+            for i in range(BSIZE + 1):
                 rows.append(fieldLet(i+1))
-            if column <= 0 or column > settings.boardSize or row not in rows:
+            if column <= 0 or column > BSIZE or row not in rows:
                 raise IndexError("Coords out of bounds")
             coords = (row, column)
             word = input("Choose tile(s): ")
@@ -187,8 +188,8 @@ class Game:
         currentPlayer.updateLetters()
 
     def turnBoards(self, board, finalBoard):
-        for i in range(settings.boardSize):
-            for o in range(settings.boardSize):
+        for i in range(BSIZE):
+            for o in range(BSIZE):
                 board._fields[i][o]._letter = finalBoard._fields[i][o]._letter
 
     def checkNewWords(self):
@@ -208,16 +209,16 @@ class Game:
                 os.system('clear')
             else:
                 os.system('cls')
-            print(f'{Color.BOLD}{Color.BLU}{"SCRABBLE":^40}{Color.ENDC}\n')
+            print(f'{C.BOLD}{C.BLU}{"SCRABBLE":^40}{C.ENDC}\n')
             print('p - Add player')
             print('b - Add AI player (bot)')
             print('d - Delete player')
             print('s - Start Game\n')
-            print(f'\t{Color.BOLD}{Color.BLU}{"Players":^20}{Color.ENDC}')
-            print("\t" + f"{Color.BOLD}-{Color.ENDC}" * 20)
+            print(f'\t{C.BOLD}{C.BLU}{"Players":^20}{C.ENDC}')
+            print("\t" + f"{C.BOLD}-{C.ENDC}" * 20)
             for index, player in enumerate(self._players):
                 if isinstance(player, Bot):
-                    print(f'\t{index + 1:>2}.{player._name:>14} {Color.GRE}AI{Color.ENDC}')  # noqa: E501
+                    print(f'\t{index + 1:>2}.{player._name:>14} {C.GRE}AI{C.ENDC}')  # noqa: E501
                 else:
                     print(f'\t{index + 1:>2}.{player._name:>17}')
             print('\n' * 5)
@@ -325,7 +326,7 @@ class Game:
                     try:
                         self.swapTilesTurn(currentPlayer)
                     except (ValueError, IndexError):
-                        print('\nWrong format of input\n')  # noqa: E501
+                        print('\nWrong format of input\n')
                         input()
                         self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                         playerMoveCounter = 0
@@ -333,7 +334,7 @@ class Game:
                     endTurn = True
                 elif turn == 'p':
                     if isinstance(currentPlayer, Bot):
-                        currentPlayer.makeMove(self._tempBoard, self._board)  # noqa: E501
+                        currentPlayer.makeMove(self._tempBoard, self._board)
                     self.placeTilesCheck(currentPlayer, cancelTurn)
                     break
                 elif turn == 'e':
@@ -356,7 +357,7 @@ class Game:
                     except BoardError:
                         if isinstance(currentPlayer, Bot):
                             self.turnBoards(self._tempBoard, self._board)
-                        else: 
+                        else:
                             print("Current board layout is incorrect")
                             input()
 

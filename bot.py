@@ -27,6 +27,170 @@ class Bot(Player):
                 possible[word] += pointTable[letter]
         return possible
 
+    def lastLetterWords(self, letter):
+        words = []
+        letter = letter.lower()
+        for dictLetter in newDict.values():
+            for word in dictLetter:
+                if word[-1] == letter:
+                    words.append(word)
+        return words
+
+    def checkRightHorizontalMoves(self, board):
+        for i in range(boardSize):
+            for j in range(boardSize):
+                possible = {}
+                freeFields = 0
+                try:
+                    term1 = board._fields[i][j]._letter != BCHAR
+                    term2 = board._fields[i][j - 1]._letter == BCHAR
+                    term3 = board._fields[i][j + 1]._letter == BCHAR
+                except IndexError:
+                    continue
+                if term1 and term2 and term3:
+                    for x in range(maxWordLength):
+                        if board._fields[i][j + x] == BCHAR:
+                            freeFields += 1
+                        else:
+                            break
+                    for word in newDict[board._fields[i][j]._letter]:
+                        tiles = copy(self._tileLetters)
+                        tiles.append(board._fields[i][j]._letter)
+                        counter = 0
+                        word = word.upper()
+                        for letter in word:
+                            if letter in tiles:
+                                index = tiles.index(letter)
+                                del tiles[index]
+                                counter += 1
+                        subTerm1 = counter == len(word)
+                        subTerm2 = word not in possible.keys()
+                        if subTerm1 and subTerm2:
+                            possible[word] = 0
+                            for letter in word:
+                                possible[word] += pointTable[letter]
+                            if board._fields[i][j]._letter != BCHAR:
+                                self._moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
+
+    def checkVerticalMoves(self, board):
+        for i in range(boardSize):
+            for j in range(boardSize):
+                possible = {}
+                freeFields = 0
+                try:
+                    term1 = board._fields[i][j]._letter != BCHAR
+                    term2 = board._fields[i - 1][j]._letter == BCHAR
+                    term3 = board._fields[i + 1][j]._letter == BCHAR
+                except IndexError:
+                    continue
+                if term1 and term2 and term3:
+                    for x in range(maxWordLength):
+                        if board._fields[i + x][j] == BCHAR:
+                            freeFields += 1
+                        else:
+                            break
+                    for word in newDict[board._fields[i][j]._letter]:
+                        tiles = copy(self._tileLetters)
+                        tiles.append(board._fields[i][j]._letter)
+                        counter = 0
+                        word = word.upper()
+                        for letter in word:
+                            if letter in tiles:
+                                index = tiles.index(letter)
+                                del tiles[index]
+                                counter += 1
+                        subTerm1 = counter == len(word)
+                        subTerm2 = word not in possible.keys()
+                        if subTerm1 and subTerm2:
+                            possible[word] = 0
+                            for letter in word:
+                                possible[word] += pointTable[letter]
+                            self._moves.append([word, possible[word], (i + 1, j), "down"])  # noqa: E501
+
+    def checkInvHorMoves(self, board):
+        """
+        Meaning: Check for (Inv)erted (Hor)izontal Moves
+
+        Checks for possible moves where the last letter is already on the board
+        """
+        for i in range(boardSize):
+            for j in range(boardSize):
+                possible = {}
+                freeFields = 0
+                try:
+                    term1 = board._fields[i][j]._letter != BCHAR
+                    term2 = board._fields[i][j - 1]._letter == BCHAR
+                    term3 = board._fields[i][j + 1]._letter == BCHAR
+                except IndexError:
+                    continue
+                if term1 and term2 and term3:
+                    for x in range(maxWordLength):
+                        if board._fields[i][j + x] == BCHAR:
+                            freeFields += 1
+                        else:
+                            break
+                    words = self.lastLetterWords(board._fields[i][j]._letter)
+                    for word in words:
+                        tiles = copy(self._tileLetters)
+                        tiles.append(board._fields[i][j]._letter)
+                        counter = 0
+                        word = word.upper()
+                        for letter in word:
+                            if letter in tiles:
+                                index = tiles.index(letter)
+                                del tiles[index]
+                                counter += 1
+                        subTerm1 = counter == len(word)
+                        subTerm2 = word not in possible.keys()
+                        if subTerm1 and subTerm2:
+                            possible[word] = 0
+                            for letter in word:
+                                possible[word] += pointTable[letter]
+                            if board._fields[i][j]._letter != BCHAR:
+                                self._moves.append([" " + word[0:-1], possible[word], (i, j - len(word) + 1), "right"])  # noqa: E501
+
+    def checkInvVerMoves(self, board):
+        """
+        Meaning: Check for (Inv)erted (Ver)tical Moves
+
+        Checks for possible moves where the last letter is already on the board
+        """
+        for i in range(boardSize):
+            for j in range(boardSize):
+                possible = {}
+                freeFields = 0
+                try:
+                    term1 = board._fields[i][j]._letter != BCHAR
+                    term2 = board._fields[i + 1][j]._letter == BCHAR
+                    term3 = board._fields[i - 1][j]._letter == BCHAR
+                except IndexError:
+                    continue
+                if term1 and term2 and term3:
+                    for x in range(maxWordLength):
+                        if board._fields[i - x][j] == BCHAR:
+                            freeFields += 1
+                        else:
+                            break
+                    words = self.lastLetterWords(board._fields[i][j]._letter)
+                    for word in words:
+                        tiles = copy(self._tileLetters)
+                        tiles.append(board._fields[i][j]._letter)
+                        counter = 0
+                        word = word.upper()
+                        for letter in word:
+                            if letter in tiles:
+                                index = tiles.index(letter)
+                                del tiles[index]
+                                counter += 1
+                        subTerm1 = counter == len(word)
+                        subTerm2 = word not in possible.keys()
+                        if subTerm1 and subTerm2:
+                            possible[word] = 0
+                            for letter in word:
+                                possible[word] += pointTable[letter]
+                            if board._fields[i][j]._letter != BCHAR:
+                                self._moves.append([" " + word[0:-1], possible[word], (i - len(word) + 1, j), "down"])  # noqa: E501
+
     def makeMove(self, board, ref):
         self._moves = []
         # words = sorted(self.checkOwnWords())
@@ -35,35 +199,12 @@ class Bot(Player):
             # bestWord = words[0]
             bestWord = max(words, key=words.get)
         mid = floor(boardSize / 2)
-        moves = []
         if board._fields[mid][mid]._letter == BCHAR:
-            moves.append([" " + bestWord, 0, (mid, mid), choice(["right", "down"])])  # noqa: E501
+            word = " " + bestWord
+            direction = choice(["right", "down"])
+            self._moves.append([word, 0, (mid, mid), direction])
         else:
-            for i in range(boardSize):
-                for j in range(boardSize):
-                    possible = {}
-                    freeFields = 0
-                    if board._fields[i][j]._letter != BCHAR and board._fields[i][j - 1]._letter == BCHAR and board._fields[i][j + 1]._letter == BCHAR:  # noqa: E501
-                        for x in range(maxWordLength):
-                            if board._fields[i][j + x] == BCHAR:
-                                freeFields += 1
-                            else:
-                                break
-                        for word in newDict[board._fields[i][j]._letter]:
-                            tiles = copy(self._tileLetters)
-                            tiles.append(board._fields[i][j]._letter)
-                            counter = 0
-                            word = word.upper()
-                            for letter in word:
-                                if letter in tiles:
-                                    index = tiles.index(letter)
-                                    del tiles[index]
-                                    counter += 1
-                            if counter == len(word) and word not in possible.keys():  # noqa: E501
-                                possible[word] = 0
-                                for letter in word:
-                                    possible[word] += pointTable[letter]
-                                if board._fields[i][j]._letter != BCHAR:
-                                    moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
-
-        self._moves = moves
+            self.checkRightHorizontalMoves(board)
+            self.checkVerticalMoves(board)
+            self.checkInvHorMoves(board)
+            self.checkInvVerMoves(board)

@@ -33,9 +33,10 @@ class Player:
         self.updateLetters()
 
     def reloadTiles(self, tiles):
-        tempTiles = sample(tiles, (basicTileNumber - len(self._tiles)))
         if len(tiles) < (basicTileNumber - len(self._tiles)):
             tempTiles = sample(tiles, len(tiles))
+        else:
+            tempTiles = sample(tiles, (basicTileNumber - len(self._tiles)))
         for tile in tempTiles:
             self._tiles.append(tile)
         for tile in tempTiles:
@@ -44,7 +45,7 @@ class Player:
 
     def updateLetters(self):
         self._tileLetters = []
-        for i in range(basicTileNumber):
+        for i in range(len(self._tiles)):
             self._tileLetters.append(self._tiles[i]._letter)
 
     def givePoints(self, words):
