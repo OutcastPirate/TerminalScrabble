@@ -200,8 +200,8 @@ class Game:
 
     def checkNewWords(self):
         newWords = []
-        boardWords = self._board.getWords()
-        tempBoardWords = self._tempBoard.getWords()
+        boardWords = self._board.getBoardWords()
+        tempBoardWords = self._tempBoard.getBoardWords()
         for word in tempBoardWords:
             if word not in boardWords:
                 newWords.append(word)

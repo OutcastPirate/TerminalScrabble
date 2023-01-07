@@ -19,7 +19,6 @@ class BoardError(Exception):
 
 def wordInDict(word):
     if word not in getWords(word[0]):
-        # raise WrongWordError("This word doesn't exist in the dictionary.")
         return False
     return True
 
@@ -93,30 +92,13 @@ class Board:
             self._fields[row + i - 1][column - 1].setLetter(content[i])
 
     def validateBoard(self):
-        words = []
-        for i in range(boardSize):
-            row = ''
-            for o in range(boardSize):
-                row += self._fields[i][o].letter
-            line = row.split(boardCharacter)
-            for word in line:
-                if word != '' and len(word) > 1:
-                    words.append(word)
-        for i in range(boardSize):
-            row = ''
-            for o in range(boardSize):
-                row += self._fields[o][i].letter
-            line = row.split(boardCharacter)
-            for word in line:
-                if word != '' and len(word) > 1:
-                    words.append(word)
+        words = self.getBoardWords()
         for word in words:
             if not wordInDict(word.lower()):
-                # raise WrongWordError(f"{word} doesn't exist in dictionary.")
                 return False
         return True
 
-    def getWords(self):
+    def getBoardWords(self):
         words = []
         for i in range(boardSize):
             row = ''

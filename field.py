@@ -14,7 +14,8 @@ class Field:
     def __init__(self):
         self._letter = boardCharacter
 
-    def get_letter(self):
+    @property
+    def letter(self):
         return self._letter
 
     def setLetter(self, letter):

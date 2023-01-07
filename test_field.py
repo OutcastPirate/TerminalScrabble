@@ -27,7 +27,7 @@ def test_letterSetOccupiedError():
         field.setLetter('B')
 
 
-def test_getLetter():
+def test_letter():
     field = Field()
     field.setLetter('H')
-    assert field.get_letter() == 'H'
+    assert field.letter == 'H'
