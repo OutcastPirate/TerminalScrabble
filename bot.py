@@ -45,9 +45,11 @@ class Bot(Player):
                     term1 = board._fields[i][j]._letter != BCHAR
                     term2 = board._fields[i][j - 1]._letter == BCHAR
                     term3 = board._fields[i][j + 1]._letter == BCHAR
+                    term4 = board._fields[i - 1][j + 1]._letter == BCHAR
+                    term5 = board._fields[i + 1][j + 1]._letter == BCHAR
                 except IndexError:
                     continue
-                if term1 and term2 and term3:
+                if term1 and term2 and term3 and term4 and term5:
                     for x in range(maxWordLength):
                         if board._fields[i][j + x] == BCHAR:
                             freeFields += 1
@@ -70,7 +72,9 @@ class Bot(Player):
                             for letter in word:
                                 possible[word] += pointTable[letter]
                             if board._fields[i][j]._letter != BCHAR:
-                                self._moves.append([word, possible[word], (i, j + 1), "right"])  # noqa: E501
+                                pts = possible[word]
+                                pos = (i, j + 1)
+                                self._moves.append([word, pts, pos, "right"])
 
     def checkVerticalMoves(self, board):
         for i in range(BSIZE):
@@ -81,9 +85,11 @@ class Bot(Player):
                     term1 = board._fields[i][j]._letter != BCHAR
                     term2 = board._fields[i - 1][j]._letter == BCHAR
                     term3 = board._fields[i + 1][j]._letter == BCHAR
+                    term4 = board._fields[i + 1][j + 1]._letter == BCHAR
+                    term5 = board._fields[i + 1][j - 1]._letter == BCHAR
                 except IndexError:
                     continue
-                if term1 and term2 and term3:
+                if term1 and term2 and term3 and term4 and term5:
                     for x in range(maxWordLength):
                         if board._fields[i + x][j] == BCHAR:
                             freeFields += 1
@@ -121,9 +127,11 @@ class Bot(Player):
                     term1 = board._fields[i][j]._letter != BCHAR
                     term2 = board._fields[i][j - 1]._letter == BCHAR
                     term3 = board._fields[i][j + 1]._letter == BCHAR
+                    term4 = board._fields[i + 1][j - 1]._letter == BCHAR
+                    term5 = board._fields[i - 1][j - 1]._letter == BCHAR
                 except IndexError:
                     continue
-                if term1 and term2 and term3:
+                if term1 and term2 and term3 and term4 and term5:
                     for x in range(maxWordLength):
                         if board._fields[i][j + x] == BCHAR:
                             freeFields += 1
@@ -170,9 +178,11 @@ class Bot(Player):
                     term1 = board._fields[i][j]._letter != BCHAR
                     term2 = board._fields[i + 1][j]._letter == BCHAR
                     term3 = board._fields[i - 1][j]._letter == BCHAR
+                    term4 = board._fields[i - 1][j - 1]._letter == BCHAR
+                    term5 = board._fields[i - 1][j + 1]._letter == BCHAR
                 except IndexError:
                     continue
-                if term1 and term2 and term3:
+                if term1 and term2 and term3 and term4 and term5:
                     for x in range(maxWordLength):
                         if board._fields[i - x][j] == BCHAR:
                             freeFields += 1
