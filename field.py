@@ -11,12 +11,10 @@ class FieldError(ValueError):
 
 
 class Field:
-    def __init__(self, bonus=False):
+    def __init__(self):
         self._letter = boardCharacter
-        self._bonus = bonus
 
-    @property
-    def letter(self):
+    def get_letter(self):
         return self._letter
 
     def setLetter(self, letter):
