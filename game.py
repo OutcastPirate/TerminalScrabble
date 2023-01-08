@@ -13,7 +13,7 @@ from copy import copy
 from field import FieldError
 from checkDict import createDict
 from random import choice
-import os
+from os import system, name as osName
 
 
 class Game:
@@ -42,10 +42,10 @@ class Game:
         return self._players
 
     def displayLeaderboard(self):
-        if (os.name == 'posix'):
-            os.system('clear')
+        if (osName == 'posix'):
+            system('clear')
         else:
-            os.system('cls')
+            system('cls')
         print('\n')
         print(f'\t{C.BD}{C.BLU}{"Leaderboard":^30}{C.ENDC}')
         print(f'\t{C.BD}{"Player":20}{"Points":>10}{C.ENDC}')
@@ -56,10 +56,10 @@ class Game:
         input()
 
     def displayFinalPoints(self):
-        if (os.name == 'posix'):
-            os.system('clear')
+        if (osName == 'posix'):
+            system('clear')
         else:
-            os.system('cls')
+            system('cls')
         print('\n')
         print(f'\t{C.BD}{C.RED}{"THE GAME ENDED":^30}{C.ENDC}')
         print('\n')
@@ -211,10 +211,10 @@ class Game:
         createDict()
         players = []
         while (True):
-            if (os.name == 'posix'):
-                os.system('clear')
+            if (osName == 'posix'):
+                system('clear')
             else:
-                os.system('cls')
+                system('cls')
             print(f'{C.BD}{C.BLU}{"SCRABBLE":^40}{C.ENDC}\n')
             print('p - Add player')
             print('b - Add AI player (bot)')
@@ -287,10 +287,10 @@ class Game:
         self.turnBoards(self._board, self._tempBoard)
         currentPlayer.reloadTiles(self._tiles)
         if isinstance(currentPlayer, Bot):
-            if (os.name == 'posix'):
-                os.system('clear')
+            if (osName == 'posix'):
+                system('clear')
             else:
-                os.system('cls')
+                system('cls')
             self.printTempBoard()
             input()
 
@@ -308,10 +308,10 @@ class Game:
         while (gameInProgress):
             if ENDGAME:
                 break
-            if (os.name == 'posix'):
-                os.system('clear')
+            if (osName == 'posix'):
+                system('clear')
             else:
-                os.system('cls')
+                system('cls')
             self.printTempBoard()
             endTurn = False
             botCancel = False
