@@ -1,14 +1,41 @@
 from game import Game
 from os import system, name as osName
 from colors import Color as C
-from board import BoardError
+from board import BoardError, NotConnectedError
 from player import Player
 from bot import Bot
+from fieldLetters import fieldLet
 from copy import copy
 from checkDict import createDict
+from settings import boardCharacter as BCHAR
+from settings import boardSize as BSIZE
+from math import floor
+from board import WrongWordError
+from field import FieldError
+from tile import TileError
 
 
 class Scrabble(Game):
+
+    def printTempBoard(self):
+        for i in range(BSIZE+1):
+            print(f'{C.BD} {i} {C.ENDC}', end="\t")
+        print('\n')
+        for i in range(BSIZE):
+            print(f'{C.BD} {fieldLet(i+1)}{C.ENDC}', end="\t")
+            for field in self._tempBoard.getBoard()[i]:
+                middle = floor(BSIZE / 2)
+                if field == self._tempBoard.getBoard()[middle][middle]:
+                    format = C.MID + C.BD
+                    if field.letter == BCHAR:
+                        print(f'{format}{field.letter}{C.ENDC}', end='\t')
+                    else:
+                        print(f'{format} {field.letter} {C.ENDC}', end='\t')
+                elif field.letter == BCHAR:
+                    print(f'{C.RED}{field.letter}{C.ENDC}', end='\t')
+                else:
+                    print(f'{C.GRE} {field.letter} {C.ENDC}', end='\t')
+            print('\n')
 
     def displayLeaderboard(self):
         if (osName == 'posix'):
@@ -44,6 +71,61 @@ class Scrabble(Game):
             print(f'{C.MID}It was a draw!{C.ENDC}')
         print('\n' * 4)
         input()
+
+    def placeTilesInput(self, currentPlayer):
+        print("\nFormat: coordinates separated with a blank space")
+        print('Multiple tiles: 1 A - write down / A 1 - write right\n')
+        field = input('Choose input field: ')
+        position = field.split(' ')
+        try:
+            row = position[0]
+            column = int(position[1])
+            direction = 'right'
+        except ValueError:
+            row = position[1]
+            try:
+                column = int(position[0])
+            except ValueError:
+                raise IndexError
+            direction = 'down'
+        rows = []
+        for i in range(BSIZE + 1):
+            rows.append(fieldLet(i+1))
+        if column <= 0 or column > BSIZE or row not in rows:
+            raise IndexError("Coords out of bounds")
+        coords = (row, column)
+        word = input("Choose tile(s): ")
+        self.placeTilesTurn(currentPlayer, word, coords, direction)
+
+    def placeTilesCheck(self, currentPlayer, cancelTurn):
+        try:
+            self.placeTilesInput(currentPlayer)
+            middle = floor(BSIZE / 2)
+            if self._tempBoard.getBoard()[middle][middle]._letter == BCHAR:
+                self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+                print('\nFirst tile has to be placed on the middle field. \n')
+                input()
+        except IndexError:
+            print("Chosen field out of bounds")
+            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+            input()
+        except FieldError:
+            if not isinstance(currentPlayer, Bot):
+                print("Chosen field is occupied")
+                input()
+        except TileError:
+            if not isinstance(currentPlayer, Bot):
+                print("\nAvailable tiles don't match the input.\n")
+                input()
+        except NotConnectedError:
+            if not isinstance(currentPlayer, Bot):
+                print("\nAll tiles have to be connected.\n")
+                input()
+        except WrongWordError:
+            if not isinstance(currentPlayer, Bot):
+                print("Word goes out of bounds")
+                input()
+            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
 
     def beginGame(self):
         createDict()
@@ -117,6 +199,14 @@ class Scrabble(Game):
             else:
                 print("\nWrong option. Choose again.\n")
                 input()
+
+    def swapTilesTurn(self, currentPlayer):
+        print("Format: '1,2,3' -> swap the first three tiles")
+        chosen = input("Wchich tiles do you want to swap: ")
+        positions = chosen.split(',')
+        currentPlayer.swapTiles(positions, self._tiles)
+        print(f'Your new tiles: {currentPlayer._tileLetters}')
+        input()
 
     def play(self):
         self.beginGame()
@@ -207,7 +297,7 @@ class Scrabble(Game):
                     if turnsSkipped == len(self._players) * 2 or botEnd == 20:
                         ENDGAME = True
                     try:
-                        self.endTurn(currentPlayer)
+                        self.endTurnDisplay(currentPlayer)
                         playerIndex = (playerIndex + 1) % len(self.players)
                         playerMoveCounter = 0
                         turnIndex += 1
@@ -229,6 +319,16 @@ class Scrabble(Game):
             elif player._points == self._winner._points:
                 self._winner._points = 0
         self.displayFinalPoints()
+
+    def endTurnDisplay(self, currentPlayer):
+        self.endTurn(currentPlayer)
+        if isinstance(currentPlayer, Bot):
+            if (osName == 'posix'):
+                system('clear')
+            else:
+                system('cls')
+            self.printTempBoard()
+            input()
 
 
 scrabble = Scrabble()
