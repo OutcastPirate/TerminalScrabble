@@ -73,28 +73,33 @@ class Scrabble(Game):
         input()
 
     def placeTilesInput(self, currentPlayer):
-        print("\nFormat: coordinates separated with a blank space")
-        print('Multiple tiles: 1 A - write down / A 1 - write right\n')
-        field = input('Choose input field: ')
-        position = field.split(' ')
-        try:
-            row = position[0]
-            column = int(position[1])
-            direction = 'right'
-        except ValueError:
-            row = position[1]
+        if not isinstance(currentPlayer, Bot):
+            print("\nFormat: coordinates separated with a blank space")
+            print('Multiple tiles: 1 A - write down / A 1 - write right\n')
+            field = input('Choose input field: ')
+            position = field.split(' ')
             try:
-                column = int(position[0])
+                row = position[0]
+                column = int(position[1])
+                direction = 'right'
             except ValueError:
-                raise IndexError
-            direction = 'down'
-        rows = []
-        for i in range(BSIZE + 1):
-            rows.append(fieldLet(i+1))
-        if column <= 0 or column > BSIZE or row not in rows:
-            raise IndexError("Coords out of bounds")
-        coords = (row, column)
-        word = input("Choose tile(s): ")
+                row = position[1]
+                try:
+                    column = int(position[0])
+                except ValueError:
+                    raise IndexError
+                direction = 'down'
+            rows = []
+            for i in range(BSIZE + 1):
+                rows.append(fieldLet(i+1))
+            if column <= 0 or column > BSIZE or row not in rows:
+                raise IndexError("Coords out of bounds")
+            coords = (row, column)
+            word = input("Choose tile(s): ")
+        else:
+            word = ''
+            coords = ''
+            direction = ''
         self.placeTilesTurn(currentPlayer, word, coords, direction)
 
     def placeTilesCheck(self, currentPlayer, cancelTurn):
