@@ -81,7 +81,7 @@ class Board:
             try:
                 letters.append(self._fields[field[0]][field[1]]._letter)
             except IndexError:
-                raise WrongWordError
+                pass
         middle = floor(boardSize / 2)
         firstTerm = (len(set(letters)) == 1)
         secondTerm = (list(set(letters))[0] == boardCharacter)

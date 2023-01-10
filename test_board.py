@@ -1,7 +1,6 @@
 from board import (
     Board,
-    BoardError,
-    WrongWordError
+    BoardError
     )
 from settings import boardSize as BSIZE
 from pytest import raises
@@ -53,8 +52,16 @@ def test_insertOutOfBounds():
     board = Board()
     reference = Board()
     word = "SLOWO"
-    with raises(WrongWordError):
+    with raises(IndexError):
         board.insertVertical(word, ("A", BSIZE + 1), reference)
+
+
+def test_insertHorizontalOutOfBounds():
+    board = Board()
+    reference = Board()
+    word = "SLOWO"
+    with raises(IndexError):
+        board.insertHorizontal(word, ("A", BSIZE - 3), reference)
 
 
 def test_insertOccupied():
