@@ -111,7 +111,7 @@ class Game:
             if player._points > self._winner._points:
                 self._winner = copy(player)
             elif player._points == self._winner._points:
-                self._winner._points = 0
+                self._winner = Player('')
 
     def checkGameEnd(self):
         endTerm1 = self._playerIndex == 0
