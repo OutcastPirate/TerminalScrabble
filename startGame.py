@@ -257,14 +257,7 @@ class Scrabble(Game):
                 break
             self._playerMoveCounter += 1
             if isinstance(self._currentPlayer, Bot):
-                if self._playerMoveCounter >= 2:
-                    if self._botCancel:
-                        turn = 'c'
-                    else:
-                        self._turnsSkipped = 0
-                        turn = 'e'
-                else:
-                    turn = 'p'
+                turn = self.defineBotTurn()
             elif self._playerMoveCounter == 1:
                 print("Choose a move => ", end="")
                 turn = input("(s)-swap    (p)-place   (e)-end turn:  ")

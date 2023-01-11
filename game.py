@@ -129,6 +129,16 @@ class Game:
                 'board': copy(self._board)
             }
 
+    def defineBotTurn(self):
+        if self._playerMoveCounter >= 2:
+            if self._botCancel:
+                return 'c'
+            else:
+                self._turnsSkipped = 0
+                return 'e'
+        else:
+            return 'p'
+
     def endTurn(self, currentPlayer):
         if not self._tempBoard.validateBoard():
             raise BoardError()
