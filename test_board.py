@@ -1,6 +1,7 @@
 from board import (
     Board,
-    BoardError
+    BoardError,
+    NotConnectedError
     )
 from settings import boardSize as BSIZE
 from pytest import raises
@@ -40,12 +41,28 @@ def test_insertHorizontal():
     assert word in board.getBoardWords()[0]
 
 
+def test_disconnectedHorizontalStart():
+    board = Board()
+    reference = Board()
+    word = "SLOWO"
+    with raises(NotConnectedError):
+        board.insertHorizontal(word, ("A", 8), reference)
+
+
 def test_insertVertical():
     board = Board()
     reference = Board()
     word = "SLOWO"
     board.insertVertical(word, ("H", 8), reference)
     assert word in board.getBoardWords()[0]
+
+
+def test_disconnectedVerticalStart():
+    board = Board()
+    reference = Board()
+    word = "SLOWO"
+    with raises(NotConnectedError):
+        board.insertVertical(word, ("A", 8), reference)
 
 
 def test_insertOutOfBounds():
@@ -118,3 +135,13 @@ def test_failedBoardValidation():
     word = "GHYUHD"
     board.insertVertical(word, ("H", 8), reference)
     assert board.validateBoard() is False
+
+
+def test_disconnectedVertical():
+    board = Board()
+    reference = Board()
+    word = "SLOWO"
+    board.insertVertical(word, ("H", 8), reference)
+    secondWord = "JELEŃ"
+    with raises(NotConnectedError):
+        board.insertVertical(secondWord, ("A", 3), reference)

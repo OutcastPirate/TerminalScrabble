@@ -35,7 +35,7 @@ def test_gameRemovePlayer():
 def test_players():
     scrabble = Game()
     Jack = Player("Jack")
-    Violet = Player("Violet")
+    Violet = Player("Annabeth")
     scrabble.addPlayer(Jack)
     scrabble.addPlayer(Violet)
     assert scrabble.players == [Jack, Violet]
