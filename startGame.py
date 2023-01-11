@@ -298,15 +298,11 @@ class Scrabble(Game):
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
-                    termOne = self._turnsSkipped == len(self._players)
-                    if termOne * 2 or self._botEnd == 20:
+                    termOne = self._turnsSkipped == len(self._players) * 2
+                    if termOne or self._botEnd == 20:
                         self._ENDGAME = True
                     try:
                         self.endTurnDisplay(currentPlayer)
-                        pIndex = self._playerIndex + 1
-                        self._playerIndex = pIndex % len(self.players)
-                        self._playerMoveCounter = 0
-                        self._turnIndex += 1
                         if self._playerIndex == 0:
                             self.displayLeaderboard()
                         break

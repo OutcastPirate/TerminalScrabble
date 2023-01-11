@@ -108,3 +108,7 @@ class Game:
         currentPlayer.givePoints(self.checkNewWords())
         self.turnBoards(self._board, self._tempBoard)
         currentPlayer.reloadTiles(self._tiles)
+        pIndex = self._playerIndex + 1
+        self._playerIndex = pIndex % len(self.players)
+        self._playerMoveCounter = 0
+        self._turnIndex += 1
