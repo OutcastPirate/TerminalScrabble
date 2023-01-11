@@ -102,17 +102,17 @@ class Scrabble(Game):
             direction = ''
         self.placeTilesTurn(currentPlayer, word, coords, direction)
 
-    def placeTilesCheck(self, currentPlayer, cancelTurn):
+    def placeTilesCheck(self, currentPlayer):
         try:
             self.placeTilesInput(currentPlayer)
             middle = floor(BSIZE / 2)
             if self._tempBoard.getBoard()[middle][middle]._letter == BCHAR:
-                self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+                self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
                 print('\nFirst tile has to be placed on the middle field. \n')
                 input()
         except IndexError:
             print("Chosen field out of bounds")
-            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+            self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
             input()
         except FieldError:
             if not isinstance(currentPlayer, Bot):
@@ -130,7 +130,7 @@ class Scrabble(Game):
             if not isinstance(currentPlayer, Bot):
                 print("Word goes out of bounds")
                 input()
-            self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
+            self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
 
     def beginGame(self):
         createDict()
@@ -216,6 +216,84 @@ class Scrabble(Game):
         print(f'Your new tiles: {currentPlayer._tileLetters}')
         input()
 
+    def endTurnInterface(self):
+        termOne = self._turnsSkipped == len(self._players) * 2
+        if termOne or self._botEnd == 20:
+            self._ENDGAME = True
+        try:
+            self.endTurnDisplay(self._currentPlayer)
+            if self._playerIndex == 0:
+                self.displayLeaderboard()
+        except BoardError:
+            if isinstance(self._currentPlayer, Bot):
+                self.turnBoards(self._tempBoard, self._board)
+                self._botEnd += 1
+                self._botCancel = True
+            else:
+                print("Current board layout is incorrect")
+                input()
+
+    def startTurn(self):
+        while True:
+            if self._ENDGAME:
+                break
+            self._playerMoveCounter += 1
+            if isinstance(self._currentPlayer, Bot):
+                if self._playerMoveCounter >= 2:
+                    if self._botCancel:
+                        turn = 'c'
+                    else:
+                        self._turnsSkipped = 0
+                        turn = 'e'
+                else:
+                    turn = 'p'
+            elif self._playerMoveCounter == 1:
+                turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
+            else:
+                turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
+            if turn == 's' and self._playerMoveCounter == 1:
+                try:
+                    self.swapTilesTurn(self._currentPlayer)
+                except (ValueError, IndexError):
+                    print('\nWrong format of input\n')
+                    input()
+                    self.cancelMoveTurn(self._currentPlayer)
+                    self._playerMoveCounter = 0
+                    break
+                self._endTurn = True
+            elif turn == 'p':
+                if isinstance(self._currentPlayer, Bot):
+                    self._currentPlayer.makeMove(self._tempBoard, self._board)  # noqa: E501
+                    if len(self._currentPlayer._moves) == 0:
+                        self._endTurn = True
+                        break
+                self.placeTilesCheck(self._currentPlayer)
+                if (len(self._currentPlayer._tiles) == 7):
+                    if not isinstance(self._currentPlayer, Bot):
+                        print("\nIllegal move\n")
+                        input()
+                    self.cancelMoveTurn(self._currentPlayer)
+                break
+            elif turn == 'e':
+                if self._playerMoveCounter == 1:
+                    self._turnsSkipped += 1
+                else:
+                    self._turnsSkipped = 0
+                self._endTurn = True
+            elif turn == 'c':
+                self.cancelMoveTurn(self._currentPlayer)
+                self._playerMoveCounter = 0
+                self._botCancel = False
+                if isinstance(self._currentPlayer, Bot):
+                    self._playerMoveCounter = 2
+                    self._endTurn = True
+                break
+            else:
+                print("Wrong move, choose again: ")
+            if self._endTurn:
+                self.endTurnInterface()
+                break
+
     def play(self):
         self.beginGame()
         while (self._gameInProgress):
@@ -226,12 +304,12 @@ class Scrabble(Game):
             else:
                 system('cls')
             self.printTempBoard()
-            endTurn = False
-            botCancel = False
-            currentPlayer = self._players[self._playerIndex]
+            self._endTurn = False
+            self._botCancel = False
+            self._currentPlayer = self._players[self._playerIndex]
             if self._playerMoveCounter == 0:
-                cancelTurn = {
-                    'tiles': copy(currentPlayer._tiles),
+                self._cancelTurn = {
+                    'tiles': copy(self._currentPlayer._tiles),
                     'board': copy(self._board)
                 }
             endTerm1 = self._playerIndex == 0
@@ -239,86 +317,10 @@ class Scrabble(Game):
             if endTerm1 and endTerm2:
                 self._ENDGAME = True
             print(f'{len(self._tiles)} tiles left in the bag.')
-            print(f"{currentPlayer._name}'s turn")
-            print(f'Your tiles: {currentPlayer._tileLetters}')
-            while True:
-                if self._ENDGAME:
-                    break
-                self._playerMoveCounter += 1
-                if isinstance(currentPlayer, Bot):
-                    if self._playerMoveCounter >= 2:
-                        if botCancel:
-                            turn = 'c'
-                        else:
-                            self._turnsSkipped = 0
-                            turn = 'e'
-                    else:
-                        turn = 'p'
-                elif self._playerMoveCounter == 1:
-                    turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
-                else:
-                    turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
-                if turn == 's' and self._playerMoveCounter == 1:
-                    try:
-                        self.swapTilesTurn(currentPlayer)
-                    except (ValueError, IndexError):
-                        print('\nWrong format of input\n')
-                        input()
-                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                        self._playerMoveCounter = 0
-                        break
-                    endTurn = True
-                elif turn == 'p':
-                    if isinstance(currentPlayer, Bot):
-                        currentPlayer.makeMove(self._tempBoard, self._board)
-                        if len(currentPlayer._moves) == 0:
-                            endTurn = True
-                            break
-                    self.placeTilesCheck(currentPlayer, cancelTurn)
-                    if (len(currentPlayer._tiles) == 7):
-                        if not isinstance(currentPlayer, Bot):
-                            print("\nIllegal move\n")
-                            input()
-                        self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                    break
-                elif turn == 'e':
-                    if self._playerMoveCounter == 1:
-                        self._turnsSkipped += 1
-                    else:
-                        self._turnsSkipped = 0
-                    endTurn = True
-                elif turn == 'c':
-                    self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                    self._playerMoveCounter = 0
-                    botCancel = False
-                    if isinstance(currentPlayer, Bot):
-                        self._playerMoveCounter = 2
-                        endTurn = True
-                    break
-                else:
-                    print("Wrong move, choose again: ")
-                if endTurn:
-                    termOne = self._turnsSkipped == len(self._players) * 2
-                    if termOne or self._botEnd == 20:
-                        self._ENDGAME = True
-                    try:
-                        self.endTurnDisplay(currentPlayer)
-                        if self._playerIndex == 0:
-                            self.displayLeaderboard()
-                        break
-                    except BoardError:
-                        if isinstance(currentPlayer, Bot):
-                            self.turnBoards(self._tempBoard, self._board)
-                            self._botEnd += 1
-                            botCancel = True
-                        else:
-                            print("Current board layout is incorrect")
-                            input()
-        for player in self._players:
-            if player._points > self._winner._points:
-                self._winner = player
-            elif player._points == self._winner._points:
-                self._winner._points = 0
+            print(f"{self._currentPlayer._name}'s turn")
+            print(f'Your tiles: {self._currentPlayer._tileLetters}')
+            self.startTurn()
+            self.setWinner()
         self.displayFinalPoints()
 
     def endTurnDisplay(self, currentPlayer):

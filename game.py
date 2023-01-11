@@ -23,6 +23,8 @@ class Game:
         self._turnIndex = 0
         self._playerMoveCounter = 0
         self._ENDGAME = False
+        self._botCancel = False
+        self._endTurn = False
 
     @property
     def gameBoard(self):
@@ -50,6 +52,8 @@ class Game:
         self._turnIndex = 0
         self._playerMoveCounter = 0
         self._ENDGAME = False
+        self._botCancel = False
+        self._endTurn = False
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
@@ -83,9 +87,9 @@ class Game:
             del currentPlayer._tiles[tileIndex]
             del currentPlayer._tileLetters[tileIndex]
 
-    def cancelMoveTurn(self, currentPlayer, tiles):
+    def cancelMoveTurn(self, currentPlayer):
         self.turnBoards(self._tempBoard, self._board)
-        currentPlayer._tiles = copy(tiles)
+        currentPlayer._tiles = copy(self._cancelTurn['tiles'])
         currentPlayer.updateLetters()
 
     def turnBoards(self, board, finalBoard):
@@ -101,6 +105,13 @@ class Game:
             if word not in boardWords:
                 newWords.append(word)
         return newWords
+
+    def setWinner(self):
+        for player in self._players:
+            if player._points > self._winner._points:
+                self._winner = copy(player)
+            elif player._points == self._winner._points:
+                self._winner._points = 0
 
     def endTurn(self, currentPlayer):
         if not self._tempBoard.validateBoard():
