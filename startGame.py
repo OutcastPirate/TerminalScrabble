@@ -282,8 +282,9 @@ class Scrabble(Game):
                             break
                     self.placeTilesCheck(currentPlayer, cancelTurn)
                     if (len(currentPlayer._tiles) == 7):
-                        print("\nWord goes out of bounds\n")
-                        input()
+                        if not isinstance(currentPlayer, Bot):
+                            print("\nWord goes out of bounds\n")
+                            input()
                         self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                     break
                 elif turn == 'e':
