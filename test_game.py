@@ -63,7 +63,7 @@ def test_verticalWordFail():
 def test_horizontalWord():
     scrabble = Game()
     word = "ŻABA"
-    position = ('A', 8)
+    position = ('H', 8)
     scrabble.horizontalWord(word, position)
     assert scrabble.checkNewWords() == ["ŻABA"]
 
@@ -82,7 +82,7 @@ def test_horizontalWordFail():
 def test_cancelTurn():
     scrabble = Game()
     word = "ŻABA"
-    position = ('A', 8)
+    position = ('H', 8)
     Jack = Player("Jack")
     scrabble.horizontalWord(word, position)
     scrabble.cancelMoveTurn(Jack, Jack._tiles)
@@ -92,7 +92,7 @@ def test_cancelTurn():
 def test_placeTilesTurnLetters():
     scrabble = Game()
     word = "ŻABA"
-    position = ('A', 8)
+    position = ('H', 8)
     Jack = Player("Jack")
     createDict()
     Jack._tiles = [
@@ -131,6 +131,25 @@ def test_placeTilesTurnWord():
     assert 'KROWA' in scrabble.checkNewWords()
 
 
+def test_insertNotConnected():
+    scrabble = Game()
+    word = "KROWA"
+    position = ('H', 8)
+    Jack = Player("Jack")
+    createDict()
+    Jack._tiles = [
+        Tile('K'),
+        Tile('A'),
+        Tile('R'),
+        Tile('W'),
+        Tile('O'),
+        Tile('E'),
+        Tile('B')
+    ]
+    Jack.updateLetters()
+    scrabble.placeTilesTurn(Jack, word, position, 'right')
+
+
 def test_checkNewWords():
     pass
 
@@ -138,7 +157,7 @@ def test_checkNewWords():
 def test_endTurnFail():
     scrabble = Game()
     word = "PIYES"
-    position = ('A', 8)
+    position = ('H', 8)
     Jack = Player("Jack")
     scrabble.horizontalWord(word, position)
     createDict()

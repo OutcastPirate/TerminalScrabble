@@ -204,6 +204,9 @@ class Scrabble(Game):
             else:
                 print("\nWrong option. Choose again.\n")
                 input()
+        for player in self.players:
+            player.getStartingTiles(self._tiles)
+        self.setGameVariables()
 
     def swapTilesTurn(self, currentPlayer):
         print("Format: '1,2,3' -> swap the first three tiles")
@@ -215,17 +218,8 @@ class Scrabble(Game):
 
     def play(self):
         self.beginGame()
-        for player in self.players:
-            player.getStartingTiles(self._tiles)
-        turnsSkipped = 0
-        gameInProgress = True
-        playerIndex = 0
-        botEnd = 0
-        turnIndex = 0
-        playerMoveCounter = 0
-        ENDGAME = False
-        while (gameInProgress):
-            if ENDGAME:
+        while (self._gameInProgress):
+            if self._ENDGAME:
                 break
             if (osName == 'posix'):
                 system('clear')
@@ -234,44 +228,44 @@ class Scrabble(Game):
             self.printTempBoard()
             endTurn = False
             botCancel = False
-            currentPlayer = self._players[playerIndex]
-            if playerMoveCounter == 0:
+            currentPlayer = self._players[self._playerIndex]
+            if self._playerMoveCounter == 0:
                 cancelTurn = {
                     'tiles': copy(currentPlayer._tiles),
                     'board': copy(self._board)
                 }
-            endTerm1 = playerIndex == 0
+            endTerm1 = self._playerIndex == 0
             endTerm2 = len(self._tiles) == 0
             if endTerm1 and endTerm2:
-                ENDGAME = True
+                self._ENDGAME = True
             print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{currentPlayer._name}'s turn")
             print(f'Your tiles: {currentPlayer._tileLetters}')
             while True:
-                if ENDGAME:
+                if self._ENDGAME:
                     break
-                playerMoveCounter += 1
+                self._playerMoveCounter += 1
                 if isinstance(currentPlayer, Bot):
-                    if playerMoveCounter >= 2:
+                    if self._playerMoveCounter >= 2:
                         if botCancel:
                             turn = 'c'
                         else:
-                            turnsSkipped = 0
+                            self._turnsSkipped = 0
                             turn = 'e'
                     else:
                         turn = 'p'
-                elif playerMoveCounter == 1:
+                elif self._playerMoveCounter == 1:
                     turn = input("Choose a move => (s)-swap  (p)-place (e)-end turn: ")  # noqa: E501
                 else:
                     turn = input("Choose a move => (p)-place (e)-end turn (c)-cancel turn: ")  # noqa: E501
-                if turn == 's' and playerMoveCounter == 1:
+                if turn == 's' and self._playerMoveCounter == 1:
                     try:
                         self.swapTilesTurn(currentPlayer)
                     except (ValueError, IndexError):
                         print('\nWrong format of input\n')
                         input()
                         self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                        playerMoveCounter = 0
+                        self._playerMoveCounter = 0
                         break
                     endTurn = True
                 elif turn == 'p':
@@ -283,46 +277,47 @@ class Scrabble(Game):
                     self.placeTilesCheck(currentPlayer, cancelTurn)
                     if (len(currentPlayer._tiles) == 7):
                         if not isinstance(currentPlayer, Bot):
-                            print("\nWord goes out of bounds\n")
+                            print("\nIllegal move\n")
                             input()
                         self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
                     break
                 elif turn == 'e':
-                    if playerMoveCounter == 1:
-                        turnsSkipped += 1
+                    if self._playerMoveCounter == 1:
+                        self._turnsSkipped += 1
                     else:
-                        turnsSkipped = 0
+                        self._turnsSkipped = 0
                     endTurn = True
                 elif turn == 'c':
                     self.cancelMoveTurn(currentPlayer, cancelTurn['tiles'])
-                    playerMoveCounter = 0
+                    self._playerMoveCounter = 0
                     botCancel = False
                     if isinstance(currentPlayer, Bot):
-                        playerMoveCounter = 2
+                        self._playerMoveCounter = 2
                         endTurn = True
                     break
                 else:
                     print("Wrong move, choose again: ")
                 if endTurn:
-                    if turnsSkipped == len(self._players) * 2 or botEnd == 20:
-                        ENDGAME = True
+                    termOne = self._turnsSkipped == len(self._players)
+                    if termOne * 2 or self._botEnd == 20:
+                        self._ENDGAME = True
                     try:
                         self.endTurnDisplay(currentPlayer)
-                        playerIndex = (playerIndex + 1) % len(self.players)
-                        playerMoveCounter = 0
-                        turnIndex += 1
-                        if playerIndex == 0:
+                        pIndex = self._playerIndex + 1
+                        self._playerIndex = pIndex % len(self.players)
+                        self._playerMoveCounter = 0
+                        self._turnIndex += 1
+                        if self._playerIndex == 0:
                             self.displayLeaderboard()
                         break
                     except BoardError:
                         if isinstance(currentPlayer, Bot):
                             self.turnBoards(self._tempBoard, self._board)
-                            botEnd += 1
+                            self._botEnd += 1
                             botCancel = True
                         else:
                             print("Current board layout is incorrect")
                             input()
-        self._winner = Player('')
         for player in self._players:
             if player._points > self._winner._points:
                 self._winner = player
@@ -341,5 +336,6 @@ class Scrabble(Game):
             input()
 
 
-scrabble = Scrabble()
-scrabble.play()
+if __name__ == '__main__':
+    scrabble = Scrabble()
+    scrabble.play()

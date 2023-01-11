@@ -36,7 +36,7 @@ def test_insertHorizontal():
     board = Board()
     reference = Board()
     word = "SLOWO"
-    board.insertHorizontal(word, ("A", 1), reference)
+    board.insertHorizontal(word, ("H", 8), reference)
     assert word in board.getBoardWords()[0]
 
 
@@ -44,7 +44,7 @@ def test_insertVertical():
     board = Board()
     reference = Board()
     word = "SLOWO"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     assert word in board.getBoardWords()[0]
 
 
@@ -68,19 +68,19 @@ def test_insertOccupied():
     board = Board()
     reference = Board()
     word = "SLOWO"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     secondWord = "DRUGIE"
     with raises(FieldError):
-        board.insertHorizontal(secondWord, ("A", 1), reference)
+        board.insertHorizontal(secondWord, ("H", 8), reference)
 
 
 def test_insertConnected():
     board = Board()
     reference = Board()
     word = "SLOWO"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     secondWord = "PAĆ"
-    board.insertHorizontal(secondWord, ("A", 2), reference)
+    board.insertHorizontal(secondWord, ("H", 9), reference)
     assert "SPAĆ" in board.getBoardWords()
 
 
@@ -94,7 +94,7 @@ def test_oneWordBoardValidation():
     reference = Board()
     createDict()
     word = "SŁOWO"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     assert board.validateBoard() is True
 
 
@@ -103,11 +103,11 @@ def test_multiWordBoardValidation():
     reference = Board()
     createDict()
     word = "SŁOWO"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     secondWord = "PAĆ"
-    board.insertHorizontal(secondWord, ("A", 2), reference)
+    board.insertHorizontal(secondWord, ("H", 9), reference)
     thirdWord = "MA"
-    board.insertVertical(thirdWord, ("B", 4), reference)
+    board.insertVertical(thirdWord, ("I", 11), reference)
     assert board.validateBoard() is True
 
 
@@ -116,5 +116,5 @@ def test_failedBoardValidation():
     reference = Board()
     createDict()
     word = "GHYUHD"
-    board.insertVertical(word, ("A", 1), reference)
+    board.insertVertical(word, ("H", 8), reference)
     assert board.validateBoard() is False

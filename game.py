@@ -15,6 +15,14 @@ class Game:
         self._board = Board()
         self._tiles = tiles
         self._players = []
+        self._winner = Player('')
+        self._turnsSkipped = 0
+        self._gameInProgress = False
+        self._playerIndex = 0
+        self._botEnd = 0
+        self._turnIndex = 0
+        self._playerMoveCounter = 0
+        self._ENDGAME = False
 
     @property
     def gameBoard(self):
@@ -33,6 +41,15 @@ class Game:
     @property
     def players(self):
         return self._players
+
+    def setGameVariables(self):
+        self._turnsSkipped = 0
+        self._gameInProgress = True
+        self._playerIndex = 0
+        self._botEnd = 0
+        self._turnIndex = 0
+        self._playerMoveCounter = 0
+        self._ENDGAME = False
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)

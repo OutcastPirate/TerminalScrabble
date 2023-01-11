@@ -65,6 +65,9 @@ class Board:
             raise NotConnectedError
         for i in range(len(content)):
             self._fields[row - 1][column + i - 1].setLetter(content[i])
+        fourthTerm = (self._fields[middle][middle]._letter == boardCharacter)
+        if firstTerm and secondTerm and fourthTerm:
+            raise NotConnectedError
 
     def insertVertical(self, content, position, reference):
         row, column = position
@@ -90,6 +93,9 @@ class Board:
             raise NotConnectedError
         for i in range(len(content)):
             self._fields[row + i - 1][column - 1].setLetter(content[i])
+        fourthTerm = (self._fields[middle][middle]._letter == boardCharacter)
+        if firstTerm and secondTerm and fourthTerm:
+            raise NotConnectedError
 
     def validateBoard(self):
         words = self.getBoardWords()
