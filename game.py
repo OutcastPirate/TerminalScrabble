@@ -149,3 +149,9 @@ class Game:
         self._playerIndex = pIndex % len(self.players)
         self._playerMoveCounter = 0
         self._turnIndex += 1
+
+    def verifyEndTurn(self):
+        if self._playerMoveCounter == 1:
+            self._turnsSkipped += 1
+        else:
+            self._turnsSkipped = 0

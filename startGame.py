@@ -5,7 +5,6 @@ from board import BoardError, NotConnectedError
 from player import Player
 from bot import Bot
 from fieldLetters import fieldLet
-# from copy import copy
 from checkDict import createDict
 from settings import boardCharacter as BCHAR
 from settings import boardSize as BSIZE
@@ -243,6 +242,17 @@ class Scrabble(Game):
         if (len(self._currentPlayer._tiles) == 7):
             self.cancelMoveTurn(self._currentPlayer)
 
+    def swapTurnInferface(self):
+        try:
+            self.swapTilesTurn(self._currentPlayer)
+        except (ValueError, IndexError):
+            print('\nWrong format of input\n')
+            input()
+            self.cancelMoveTurn(self._currentPlayer)
+            self._playerMoveCounter = 0
+            return
+        self._endTurn = True
+
     def cancelTurnInterface(self):
         self.cancelMoveTurn(self._currentPlayer)
         self._playerMoveCounter = 0
@@ -265,23 +275,12 @@ class Scrabble(Game):
                 print("Choose a move => ", end="")
                 turn = input("(p)-place (e)-end turn (c)-cancel turn: ")
             if turn == 's' and self._playerMoveCounter == 1:
-                try:
-                    self.swapTilesTurn(self._currentPlayer)
-                except (ValueError, IndexError):
-                    print('\nWrong format of input\n')
-                    input()
-                    self.cancelMoveTurn(self._currentPlayer)
-                    self._playerMoveCounter = 0
-                    break
-                self._endTurn = True
+                self.swapTurnInferface()
             elif turn == 'p':
                 self.placeTilesInterface()
                 break
             elif turn == 'e':
-                if self._playerMoveCounter == 1:
-                    self._turnsSkipped += 1
-                else:
-                    self._turnsSkipped = 0
+                self.verifyEndTurn()
                 self.endTurnInterface()
                 break
             elif turn == 'c':
