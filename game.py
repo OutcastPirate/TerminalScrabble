@@ -56,7 +56,7 @@ class Game:
         self._botCancel = False
         self._endTurn = False
         self._cancelTurn = {}
-        self._currentPlayer = Player('')
+        self._currentPlayer = None
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
