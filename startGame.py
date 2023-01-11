@@ -5,7 +5,7 @@ from board import BoardError, NotConnectedError
 from player import Player
 from bot import Bot
 from fieldLetters import fieldLet
-from copy import copy
+# from copy import copy
 from checkDict import createDict
 from settings import boardCharacter as BCHAR
 from settings import boardSize as BSIZE
@@ -304,18 +304,8 @@ class Scrabble(Game):
             else:
                 system('cls')
             self.printTempBoard()
-            self._endTurn = False
-            self._botCancel = False
-            self._currentPlayer = self._players[self._playerIndex]
-            if self._playerMoveCounter == 0:
-                self._cancelTurn = {
-                    'tiles': copy(self._currentPlayer._tiles),
-                    'board': copy(self._board)
-                }
-            endTerm1 = self._playerIndex == 0
-            endTerm2 = len(self._tiles) == 0
-            if endTerm1 and endTerm2:
-                self._ENDGAME = True
+            self.preparePlayer()
+            self.checkGameEnd()
             print(f'{len(self._tiles)} tiles left in the bag.')
             print(f"{self._currentPlayer._name}'s turn")
             print(f'Your tiles: {self._currentPlayer._tileLetters}')

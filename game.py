@@ -113,6 +113,22 @@ class Game:
             elif player._points == self._winner._points:
                 self._winner._points = 0
 
+    def checkGameEnd(self):
+        endTerm1 = self._playerIndex == 0
+        endTerm2 = len(self._tiles) == 0
+        if endTerm1 and endTerm2:
+            self._ENDGAME = True
+
+    def preparePlayer(self):
+        self._endTurn = False
+        self._botCancel = False
+        self._currentPlayer = self._players[self._playerIndex]
+        if self._playerMoveCounter == 0:
+            self._cancelTurn = {
+                'tiles': copy(self._currentPlayer._tiles),
+                'board': copy(self._board)
+            }
+
     def endTurn(self, currentPlayer):
         if not self._tempBoard.validateBoard():
             raise BoardError()
