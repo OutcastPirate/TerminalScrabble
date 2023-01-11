@@ -25,6 +25,7 @@ class Game:
         self._ENDGAME = False
         self._botCancel = False
         self._endTurn = False
+        self._currentPlayer = Player('')
 
     @property
     def gameBoard(self):
@@ -49,11 +50,13 @@ class Game:
         self._gameInProgress = True
         self._playerIndex = 0
         self._botEnd = 0
-        self._turnIndex = 0
+        self._turnIndex = 1
         self._playerMoveCounter = 0
         self._ENDGAME = False
         self._botCancel = False
         self._endTurn = False
+        self._cancelTurn = {}
+        self._currentPlayer = Player('')
 
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
@@ -107,11 +110,15 @@ class Game:
         return newWords
 
     def setWinner(self):
+        points = []
         for player in self._players:
-            if player._points > self._winner._points:
-                self._winner = copy(player)
-            elif player._points == self._winner._points:
-                self._winner = Player('')
+            points.append(player._points)
+        maxPoints = max(points)
+        if points.count(maxPoints) > 1:
+            self._winner = None
+        else:
+            index = points.index(maxPoints)
+            self._winner = self._players[index]
 
     def checkGameEnd(self):
         endTerm1 = self._playerIndex == 0

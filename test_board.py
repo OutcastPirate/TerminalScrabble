@@ -145,3 +145,13 @@ def test_disconnectedVertical():
     secondWord = "JELEŃ"
     with raises(NotConnectedError):
         board.insertVertical(secondWord, ("A", 3), reference)
+
+
+def test_disconnectedHorizontal():
+    board = Board()
+    reference = Board()
+    word = "SLOWO"
+    board.insertVertical(word, ("H", 8), reference)
+    secondWord = "JELEŃ"
+    with raises(NotConnectedError):
+        board.insertHorizontal(secondWord, ("A", 3), reference)

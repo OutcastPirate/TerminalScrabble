@@ -51,6 +51,7 @@ class Scrabble(Game):
         input()
 
     def displayFinalPoints(self):
+        self.setWinner()
         if (osName == 'posix'):
             system('clear')
         else:
@@ -64,7 +65,7 @@ class Scrabble(Game):
         for player in self._players:
             print(f'\t{player._name:20}{player._points:>10}')
         print('\n' * 2)
-        if self._winner._points != 0:
+        if self._winner is not None:
             print(f'{C.MID}{self._winner._name} won! Congratulations!{C.ENDC}')
         else:
             print(f'{C.MID}It was a draw!{C.ENDC}')
@@ -305,7 +306,6 @@ class Scrabble(Game):
             print(f"{self._currentPlayer._name}'s turn")
             print(f'Your tiles: {self._currentPlayer._tileLetters}')
             self.startTurn()
-            self.setWinner()
         self.displayFinalPoints()
 
     def endTurnDisplay(self, currentPlayer):
