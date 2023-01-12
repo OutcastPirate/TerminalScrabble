@@ -464,3 +464,22 @@ def test_verifyEndTurn():
     scrabble._playerMoveCounter = 2
     scrabble.verifyEndTurn()
     assert scrabble._turnsSkipped == 0
+
+
+def test_defineBotTurnPlace():
+    scrabble = Game()
+    scrabble._playerMoveCounter = 1
+    assert scrabble.defineBotTurn() == 'p'
+
+
+def test_defineBotTurnEnd():
+    scrabble = Game()
+    scrabble._playerMoveCounter = 2
+    assert scrabble.defineBotTurn() == 'e'
+
+
+def test_defineBotTurnCancel():
+    scrabble = Game()
+    scrabble._playerMoveCounter = 9
+    scrabble._botCancel = True
+    assert scrabble.defineBotTurn() == 'c'
