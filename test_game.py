@@ -38,10 +38,10 @@ def test_gameRemovePlayer():
 def test_players():
     scrabble = Game()
     Jack = Player("Jack")
-    Violet = Player("Annabeth")
+    Julie = Player("Annabeth")
     scrabble.addPlayer(Jack)
-    scrabble.addPlayer(Violet)
-    assert scrabble.players == [Jack, Violet]
+    scrabble.addPlayer(Julie)
+    assert scrabble.players == [Jack, Julie]
 
 
 def test_verticalWord():
@@ -195,22 +195,22 @@ def test_confirmBoard():
 def test_endTurnPoints():
     createDict()
     scrabble = Game()
-    Violet = Player('Violet')
-    scrabble.addPlayer(Violet)
-    scrabble._currentPlayer = Violet
+    Julie = Player('Julie')
+    scrabble.addPlayer(Julie)
+    scrabble._currentPlayer = Julie
     scrabble.horizontalWord("ŻABA", ('H', 8))
     scrabble.endTurn(scrabble._currentPlayer)
-    assert Violet._points == 10
+    assert Julie._points == 10
 
 
 def test_endTurnPlayerIndex():
     createDict()
     scrabble = Game()
-    Violet = Player('Violet')
+    Julie = Player('Julie')
     Jack = Player('Jack')
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Julie)
     scrabble.addPlayer(Jack)
-    scrabble._currentPlayer = Violet
+    scrabble._currentPlayer = Julie
     scrabble.horizontalWord("WRONA", ('H', 8))
     scrabble.endTurn(scrabble._currentPlayer)
     assert scrabble._playerIndex == 1
@@ -219,12 +219,12 @@ def test_endTurnPlayerIndex():
 def test_endTurnPlayerTurnCouter():
     createDict()
     scrabble = Game()
-    Violet = Player('Violet')
+    Julie = Player('Julie')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Julie)
     scrabble.addPlayer(Jack)
-    scrabble._currentPlayer = Violet
+    scrabble._currentPlayer = Julie
     scrabble.horizontalWord("WRONA", ('H', 8))
     scrabble.endTurn(scrabble._currentPlayer)
     scrabble._currentPlayer = Jack
@@ -236,11 +236,11 @@ def test_noReload():
     scrabble = Game()
     word = "WRONA"
     position = ('H', 8)
-    Violet = Player("Violet")
-    scrabble.addPlayer(Violet)
-    scrabble._currentPlayer = Violet
+    Julie = Player("Julie")
+    scrabble.addPlayer(Julie)
+    scrabble._currentPlayer = Julie
     createDict()
-    Violet._tiles = [
+    Julie._tiles = [
         Tile('W'),
         Tile('R'),
         Tile('B'),
@@ -249,20 +249,20 @@ def test_noReload():
         Tile('E'),
         Tile('N')
     ]
-    Violet.updateLetters()
-    scrabble.placeTilesTurn(Violet, word, position, 'right')
-    assert len(Violet._tiles) == 2
+    Julie.updateLetters()
+    scrabble.placeTilesTurn(Julie, word, position, 'right')
+    assert len(Julie._tiles) == 2
 
 
 def test_endTurnTiles():
     scrabble = Game()
     word = "WRONA"
     position = ('H', 8)
-    Violet = Player("Violet")
-    scrabble.addPlayer(Violet)
-    scrabble._currentPlayer = Violet
+    Julie = Player("Julie")
+    scrabble.addPlayer(Julie)
+    scrabble._currentPlayer = Julie
     createDict()
-    Violet._tiles = [
+    Julie._tiles = [
         Tile('W'),
         Tile('R'),
         Tile('B'),
@@ -271,20 +271,20 @@ def test_endTurnTiles():
         Tile('E'),
         Tile('N')
     ]
-    Violet.updateLetters()
-    scrabble.placeTilesTurn(Violet, word, position, 'right')
+    Julie.updateLetters()
+    scrabble.placeTilesTurn(Julie, word, position, 'right')
     scrabble.endTurn(scrabble._currentPlayer)
-    assert len(Violet._tiles) == 7
+    assert len(Julie._tiles) == 7
 
 
 def test_notMatchingTiles():
     scrabble = Game()
     word = "RAVEN"
     position = ('H', 8)
-    Violet = Player("Violet")
-    scrabble.addPlayer(Violet)
-    scrabble._currentPlayer = Violet
-    Violet._tiles = [
+    Julie = Player("Julie")
+    scrabble.addPlayer(Julie)
+    scrabble._currentPlayer = Julie
+    Julie._tiles = [
         Tile('W'),
         Tile('R'),
         Tile('B'),
@@ -293,19 +293,19 @@ def test_notMatchingTiles():
         Tile('E'),
         Tile('N')
     ]
-    Violet.updateLetters()
+    Julie.updateLetters()
     with raises(TileError):
-        scrabble.placeTilesTurn(Violet, word, position, 'right')
+        scrabble.placeTilesTurn(Julie, word, position, 'right')
 
 
 def test_occupiedTile():
     scrabble = Game()
     word = "WRONA"
     position = ('H', 8)
-    Violet = Player("Violet")
-    scrabble.addPlayer(Violet)
-    scrabble._currentPlayer = Violet
-    Violet._tiles = [
+    Julie = Player("Julie")
+    scrabble.addPlayer(Julie)
+    scrabble._currentPlayer = Julie
+    Julie._tiles = [
         Tile('W'),
         Tile('R'),
         Tile('B'),
@@ -314,22 +314,22 @@ def test_occupiedTile():
         Tile('E'),
         Tile('N')
     ]
-    Violet.updateLetters()
-    scrabble.placeTilesTurn(Violet, word, position, 'right')
+    Julie.updateLetters()
+    scrabble.placeTilesTurn(Julie, word, position, 'right')
     with raises(FieldError):
-        scrabble.placeTilesTurn(Violet, 'EB', position, 'right')
+        scrabble.placeTilesTurn(Julie, 'EB', position, 'right')
 
 
 def test_outOfBounds():
     scrabble = Game()
     word = "WRONA"
     position = ('H', 8)
-    Violet = Player("Violet")
+    Julie = Player("Julie")
     Jack = Player("Jack")
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Julie)
     scrabble.addPlayer(Jack)
-    scrabble._currentPlayer = Violet
-    Violet._tiles = [
+    scrabble._currentPlayer = Julie
+    Julie._tiles = [
         Tile('W'),
         Tile('R'),
         Tile('B'),
@@ -347,8 +347,8 @@ def test_outOfBounds():
         Tile('E'),
         Tile('N')
     ]
-    Violet.updateLetters()
-    scrabble.placeTilesTurn(Violet, word, position, 'right')
+    Julie.updateLetters()
+    scrabble.placeTilesTurn(Julie, word, position, 'right')
     coords = (fieldLet(BSIZE-2), BSIZE)
     with raises(TileError):
         scrabble.placeTilesTurn(Jack, 'WRONA', coords, 'right')
@@ -356,12 +356,12 @@ def test_outOfBounds():
 
 def test_winner():
     scrabble = Game()
-    Violet = Player('Violet')
+    Julie = Player('Julie')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Julie)
     scrabble.addPlayer(Jack)
-    Violet._points = 10
+    Julie._points = 10
     Jack._points = 40
     scrabble.setWinner()
     assert scrabble._winner == Jack
@@ -369,12 +369,12 @@ def test_winner():
 
 def test_winnerDraw():
     scrabble = Game()
-    Violet = Player('Violet')
+    Julie = Player('Julie')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Julie)
     scrabble.addPlayer(Jack)
-    Violet._points = 711
+    Julie._points = 711
     Jack._points = 711
     scrabble.setWinner()
     assert scrabble._winner is None
@@ -382,10 +382,10 @@ def test_winnerDraw():
 
 def test_endgameCheck():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble._tiles = []
@@ -395,10 +395,10 @@ def test_endgameCheck():
 
 def test_endgameCheckFalse():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble.checkGameEnd()
@@ -407,23 +407,23 @@ def test_endgameCheckFalse():
 
 def test_preparePlayerCheckPlayer():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble._playerIndex = 0
     scrabble.preparePlayer()
-    assert scrabble._currentPlayer == Violet
+    assert scrabble._currentPlayer == Ginny
 
 
 def test_preparePlayerCheckBotControl():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble._playerIndex = 0
@@ -433,10 +433,10 @@ def test_preparePlayerCheckBotControl():
 
 def test_preparePlayerCheckEndTurn():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble._playerIndex = 0
@@ -446,9 +446,9 @@ def test_preparePlayerCheckEndTurn():
 
 def test_verifyEndTurnSkipped():
     scrabble = Game()
-    Violet = Player('Violet')
+    Ginny = Player('Ginny')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Violet)
+    scrabble.addPlayer(Ginny)
     scrabble.setGameVariables()
     scrabble._playerMoveCounter = 1
     scrabble.verifyEndTurn()
