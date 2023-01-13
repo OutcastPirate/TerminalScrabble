@@ -107,12 +107,12 @@ class Scrabble(Game):
             self.placeTilesInput(currentPlayer)
             middle = floor(BSIZE / 2)
             if self._tempBoard.getBoard()[middle][middle]._letter == BCHAR:
-                self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
+                self.cancelMoveTurn(currentPlayer)
                 print('\nFirst tile has to be placed on the middle field. \n')
                 input()
         except IndexError:
             print("Chosen field out of bounds")
-            self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
+            self.cancelMoveTurn(currentPlayer)
             input()
         except FieldError:
             if not isinstance(currentPlayer, Bot):
