@@ -1,92 +1,97 @@
-# PythonScrabble
+# main files and their content
+
+    - game.py => main game logic and backend functions
+    - startGame.py => interface file with its logic and functions
+
+## Game Start
+
+After launching 'startGame.py' file the user is presented with a starting screen with option selection:
+    - add Player
+    - add Bot
+    - delete Player
+    - start Game
+
+Basic rules:
+    - user has to add at least 2 players/bots in order to begin the game
+    - there cannot be more than 4 players
+    - players and bots are deleted using their nametag
+    - both bots' and players' names have to be unique
 
 
+## Main Game course
 
-## Getting started
+At the beggining of the game, each player is assigned 7 letter tiles from the tiles' pool.
+The amount of letters on tiles and points assigned to them are as follows:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+    1 point: A (x9), E (x8), I (x8), N (x5), O (x7), R (x4), S (x4), W (x4), Z (x5)
+    2 points: C (x3), D (x3), K(x3), L(x3), M(x3), P (x3), T (x3), Y (x4)
+    3 points: B (x2), G(x2), H(x2), J (x2), Ł (x2), U (x2)
+    5 points: Ą (x1), Ę (x1), F (x1), Ó (x1), Ś (x1), Ż (x1)
+    6 points: Ć (x1)
+    6 points: Ć (x1)
+    7 points: Ń (x1)
+    9 points: Ź (x1)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The total number of letter tiles is 100.
 
-## Add your files
+After getting their tiles, the first player is presented with 3 options of making a move:
+    - placing tiles on the board
+    - swapping his tiles (swapping tiles doesn't count as skipping a turn)
+    - skipping his turn
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+If the player has already placed some tiles on the board, the last option changes
+    from skipping a turn, to cancelling his tile placement on the board.
 
-```
-cd existing_repo
-git remote add origin https://gitlab-stud.elka.pw.edu.pl/jkryczka/pythonscrabble.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+### placing tiles
 
-- [ ] [Set up project integrations](https://gitlab-stud.elka.pw.edu.pl/jkryczka/pythonscrabble/-/settings/integrations)
+If the player opts to place his tiles on the board, he chooses 'p' as his move option.
 
-## Collaborate with your team
+The board has rows and columns, rows are described with letters starting with 'A' and columns have numbers assigned to them starting with '1'.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+The player is asked to input the beggining coordinates of his tile placement and tiles he wants to place.
 
-## Test and Deploy
+If the player opts to input multiple tiles at once, he specifies the direction with the format of coordinated input:
+    - selecting the row first, for example 'H 8' and numerous tiles will result in placing them to the right, starting with field
+    "H8" and then placing next letters at "H9" "H10"...
+    - selecting the column first, for example '8 H' and multiple tiles will respectivly place them downwards, starting with field
+    "H8" and then at "I8" "J8"...
+    - while placing only one tile the format of the input doesn't matter
 
-Use the built-in continuous integration in GitLab.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### swapping tiles
 
-***
+If the player chooses to swap their tiles, he inputs 's'.
 
-# Editing this README
+The player can swap tiles at any point of the game, as long as there are enough tiles for him to swap left in the tiles' pool.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+The tiles which he swaps are put to the side, he is assigned random new tiles from the pool and his old tiles are put back in the pool.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Swapping tiles does not count as skipping a turn and can be done any number of times during the game.
 
-## Name
-Choose a self-explaining name for your project.
+If the player chooses this option he uses his move to ONLY swap his tiles and cannot place any tiles on the board after that.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+While swapping tiles the player is asked to input indexes of the tiles he wishes to swap
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+For example:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+    If the player tiles are as follows ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+    And he inputs 3,4,7
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+    Tiles 'C', 'D' and 'G' will be swapped.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+    It is important to stick to the assigned format (indexes separated with commas), if put into any other format the program will reject the input and ask the player to make his move again
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### skipping a turn
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+If a player chooses 'e' as their move their turn is skipped with no consequences.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+However, if all players skip their turns twice in a row (in example: there are 4 players and there were 8 consequtive turn skips) the game ends.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## GAME END
 
-## License
-For open source projects, say how it is licensed.
+There are two possibilities to end the game
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+    - all player's skipped two turns back to back [link](#main-game-course)
