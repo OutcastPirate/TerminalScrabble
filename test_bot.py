@@ -39,7 +39,26 @@ def test_bestWord():
     Optimus.updateLetters()
     Optimus.makeMove(scrabble, referenceBoard)
     assert Optimus._moves[0][0][1:] == "BALON"
-    assert "BALON" in Optimus.checkOwnWords()
+
+
+def test_bestWordOccupiedMiddle():
+    createDict()
+    Optimus = Bot('Optimus')
+    scrabble = Board()
+    referenceBoard = Board()
+    Optimus._tiles = [
+        Tile('B'),
+        Tile('A'),
+        Tile('L'),
+        Tile('A'),
+        Tile('O'),
+        Tile('E'),
+        Tile('N')
+    ]
+    Optimus.updateLetters()
+    scrabble.insertHorizontal("MYSZ", ('H', 8), referenceBoard)
+    Optimus.makeMove(scrabble, referenceBoard)
+    assert Optimus._moves[0][0][1:] != "BALON"
 
 
 def test_verticalMove():

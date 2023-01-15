@@ -27,12 +27,25 @@ def test_gameAddPlayer():
     assert Jack in scrabble._players
 
 
+def test_gameAddPlayerError():
+    scrabble = Game()
+    with raises(ValueError):
+        scrabble.addPlayer('Jack')
+
+
 def test_gameRemovePlayer():
     scrabble = Game()
     Jack = Player("Jack")
     scrabble.addPlayer(Jack)
     scrabble.removePlayer(Jack)
     assert Jack not in scrabble._players
+
+
+def test_gameRemovePlayerError():
+    scrabble = Game()
+    Jack = Player("Jack")
+    with raises(ValueError):
+        scrabble.removePlayer(Jack)
 
 
 def test_players():
