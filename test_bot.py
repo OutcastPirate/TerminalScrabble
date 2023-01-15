@@ -36,7 +36,7 @@ def test_bestWord():
     ]
     Optimus.updateLetters()
     Optimus.makeMove(scrabble, referenceBoard)
-    assert Optimus._moves[0][0][1:] == " BALON"
+    assert Optimus._moves[0][0][1:] == "BALON"
     assert "BALON" in Optimus.checkOwnWords()
 
 
@@ -78,3 +78,23 @@ def test_horizontalMove():
     Optimus.updateLetters()
     Optimus.makeMove(scrabble, referenceBoard)
     assert ['NORKA', 6, (9, 8), 'right'] in Optimus._moves
+
+
+def test_reverseHorizontalMove():
+    createDict()
+    Optimus = Bot('Optimus')
+    scrabble = Board()
+    referenceBoard = Board()
+    scrabble.insertVertical("BANAN", ('H', 8), referenceBoard)
+    Optimus._tiles = [
+        Tile('N'),
+        Tile('A'),
+        Tile('L'),
+        Tile('K'),
+        Tile('R'),
+        Tile('O'),
+        Tile('N')
+    ]
+    Optimus.updateLetters()
+    Optimus.makeMove(scrabble, referenceBoard)
+    assert [' NORK', 6, (8, 3), 'right'] in Optimus._moves
