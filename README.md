@@ -81,7 +81,8 @@ Basic rules:
 
         Tiles 'C', 'D' and 'G' will be swapped.
 
-        It is important to stick to the assigned format (indexes separated with commas), if put into any other format the program will reject the input and ask the player to make his move again
+        It is important to stick to the assigned format (indexes separated with commas).
+        If put into any other format the program will reject the input and ask the player to make his move again
 
 
 ### Skipping a turn
@@ -94,4 +95,8 @@ Basic rules:
 
     There are two possibilities to end the game
 
-        - all player's skipped two turns back to back [link](#main-game-course)
+        - all player's skipped two turns back to back (see ##main-game-course -> ###skipping-a-turn)
+
+        - there are no tiles left in the bag and one whole turn has passed
+            (if the player who ends each turn depletes the bag the game ends, if not one more turn is played)
+
