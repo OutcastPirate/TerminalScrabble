@@ -433,10 +433,10 @@ def test_preparePlayerCheckBotControl():
 
 def test_preparePlayerCheckEndTurn():
     scrabble = Game()
-    Ginny = Player('Ginny')
+    Violet = Player('Violet')
     Jack = Player('Jack')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Ginny)
+    scrabble.addPlayer(Violet)
     scrabble.addPlayer(Jack)
     scrabble.setGameVariables()
     scrabble._playerIndex = 0
@@ -446,9 +446,9 @@ def test_preparePlayerCheckEndTurn():
 
 def test_verifyEndTurnSkipped():
     scrabble = Game()
-    Ginny = Player('Ginny')
+    Violet = Player('Violet')
     scrabble.setGameVariables()
-    scrabble.addPlayer(Ginny)
+    scrabble.addPlayer(Violet)
     scrabble.setGameVariables()
     scrabble._playerMoveCounter = 1
     scrabble.verifyEndTurn()
