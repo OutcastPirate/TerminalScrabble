@@ -17,6 +17,10 @@ class BoardError(Exception):
     pass
 
 
+class BadFitError(Exception):
+    pass
+
+
 def wordInDict(word):
     if word not in getWords(word[0]):
         return False
@@ -123,3 +127,15 @@ class Board:
                 if word != '' and len(word) > 1:
                     words.append(word)
         return words
+
+    def validateMoveFit(self, word, coords, direction):
+        row = fieldInt(coords[0]) - 1
+        column = coords[1] - 1
+        if direction == 'right':
+            for i in range(len(word)):
+                if column + i not in range(boardSize):
+                    raise BadFitError
+        if direction == 'down':
+            for i in range(len(word)):
+                if row + i not in range(boardSize):
+                    raise BadFitError

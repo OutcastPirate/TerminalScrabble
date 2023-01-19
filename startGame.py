@@ -1,7 +1,7 @@
 from game import Game
 from os import system, name as osName
 from colors import Color as C
-from board import BoardError, NotConnectedError
+from board import BoardError, NotConnectedError, BadFitError
 from player import Player
 from bot import Bot
 from fieldLetters import fieldLet
@@ -96,6 +96,7 @@ class Scrabble(Game):
                 raise IndexError("Coords out of bounds")
             coords = (row, column)
             word = input("Choose tile(s): ")
+            self._tempBoard.validateMoveFit(word, coords, direction)
         else:
             word = ''
             coords = ''
@@ -131,6 +132,10 @@ class Scrabble(Game):
                 print("Word goes out of bounds")
                 input()
             self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
+        except BadFitError:
+            if not isinstance(currentPlayer, Bot):
+                print("Word goes out of bounds")
+                input()
 
     def beginGame(self):
         createDict()
