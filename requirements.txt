@@ -4,9 +4,3 @@ Used libraries:
     - random
     - os
     - pytest
-
-
-
-Launch possibilities:
-    1. Launch with 'F5' keypress if inside 'startGame.py' file
-    2. launch with 'python3 startGame.py' in terminal while inside 'pythonscrabble' folder

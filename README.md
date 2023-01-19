@@ -1,7 +1,66 @@
-# main files and their content
+# LAUNCHING THE GAME
 
+    Launch possibilities:
+        1. Running 'startGame.py' file while inside it
+        2. launch with 'python3 startGame.py' in terminal while inside 'pythonscrabble' folder
+
+# Additional corrections and decisions made during the project:
+
+    - the player will not receive points for creating a word that is already on the board
+        (second instance of the same word)
+    -
+
+# Main files and their content
+
+## Main files
     - game.py => main game logic and backend functions
     - startGame.py => interface file with its logic and functions
+
+## Classes
+    - Player:
+        • file: player.py
+        • Includes all functions dealing with player's tiles distribution
+    - Bot:
+        • file: bot.py
+        • Includes all functions dealing with bot's move making decision
+        • Is a child class of Player
+    - Board:
+        • file: board.py
+        • Includes functions dealing with board layout and validation
+    - Tile:
+        • file: tile.py
+        • Includes functions dealing with single tile's properties and changes
+    - Field:
+        • file: field.py
+        • Includes functions used to modify a single board field
+    - Game:
+        • file: game.py
+        • Includes all functions dealing with player's tiles distribution
+    - Scrabble:
+        • file: startGame.py
+        • Includes all interface functions
+
+## Config file
+
+    Settings are located in the settings.py file.
+    Those include:
+        • boardSize -> the number of rows and columns on the board
+                ? - standard value = 15
+                ! - ALWAYS has to be an odd number for the game to work, if set to an even value the game won't start
+                !! - Changing this setting is not recommended as it may interfere with the game's original purpose
+        • wordsDict -> location of the game dictionary with all accepted words
+        • basicTileNumber -> Number of tiles assigned to each player
+                ? - standard value = 7
+        • boardCharacter - purely cosmetic, changes what the board field looks like without any letters assigned to it
+                ! - some suggested symbols might not display properly on all devices and terminal versions
+        • maxWordLength - maximum length of a word that will be accepted and awarded with points
+                ? - standard value compatibile with project assigment content -> 5
+
+    Additional configuration files include:
+        - tileTable.py -> The type and amount of available tiles (originally sums to 100 tiles total)
+        - pointTable.py -> Amount of points awarded for using each letter in a word
+
+# GAME
 
 ## Game Start
 
