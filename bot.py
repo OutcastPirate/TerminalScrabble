@@ -111,7 +111,9 @@ class Bot(Player):
                             possible[word] = 0
                             for letter in word:
                                 possible[word] += pointTable[letter]
-                            self._moves.append([word, possible[word], (i + 1, j), "down"])  # noqa: E501
+                            coord = (i + 1, j)
+                            pts = possible[word]
+                            self._moves.append([word, pts, coord, "down"])
 
     def checkInvHorMoves(self, board):
         """
@@ -217,10 +219,8 @@ class Bot(Player):
 
     def makeMove(self, board, ref):
         self._moves = []
-        # words = sorted(self.checkOwnWords())
         words = self.checkOwnWords()
         if len(words) > 0:
-            # bestWord = words[0]
             bestWord = max(words, key=words.get)
         mid = floor(BSIZE / 2)
         if board._fields[mid][mid]._letter == BCHAR:
