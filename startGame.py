@@ -129,7 +129,7 @@ class Scrabble(Game):
                 input()
         except WrongWordError:
             if not isinstance(currentPlayer, Bot):
-                print("Word goes out of bounds")
+                print("Breached board boarders")
                 input()
             self.cancelMoveTurn(currentPlayer, self._cancelTurn['tiles'])
         except BadFitError:

@@ -6,7 +6,7 @@ from checkDict import createDict
 from field import FieldError
 from tile import Tile, TileError
 from copy import copy
-from settings import boardSize as BSIZE
+from testSettings import boardSize as BSIZE
 from fieldLetters import fieldLet
 
 

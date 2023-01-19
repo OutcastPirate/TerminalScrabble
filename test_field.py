@@ -1,5 +1,5 @@
 from field import Field, CharacterError, FieldError
-from settings import boardCharacter as BCHAR
+from testSettings import boardCharacter as BCHAR
 from pytest import raises
 
 

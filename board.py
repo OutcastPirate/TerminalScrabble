@@ -29,8 +29,11 @@ def wordInDict(word):
 
 class Board:
     def __init__(self):
-        if boardSize % 2 == 0:
-            raise BoardError("Board size have to be an odd number")
+        if boardSize % 2 == 0 or boardSize < 15:
+            if __name__ != 'main':
+                print("\nCannot start with current settings.\n")
+                print("Board size has to be an even number >= 15.\n")
+                quit()
         else:
             self._size = boardSize
         self._fields = []

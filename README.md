@@ -47,9 +47,10 @@
     Settings are located in the settings.py file.
     Those include:
         • boardSize -> the number of rows and columns on the board
-                ? - standard value = 15
+                ? - standard value = 15, lowest possible value = 15 (Smaller boards wouldn't make sense)
                 ! - ALWAYS has to be an odd number for the game to work, if set to an even value the game won't start
                 !! - Changing this setting is not recommended as it may interfere with the game's original purpose
+
         • wordsDict -> location of the game dictionary with all accepted words
         • basicTileNumber -> Number of tiles assigned to each player
                 ? - standard value = 7
