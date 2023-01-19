@@ -156,7 +156,7 @@
 
     There are two possibilities to end the game
 
-        - all player's skipped two turns back to back (see ##main-game-course -> ###skipping-a-turn)
+        - all player's skipped two turns back to back (see 'Game'/'Main Game Course'/'Skipping a turn' Chapter)
 
         - there are no tiles left in the bag and one whole turn has passed
             (if the player who ends each turn depletes the bag the game ends, if not one more turn is played)
