@@ -58,6 +58,14 @@ class Game:
         self._cancelTurn = {}
         self._currentPlayer = None
 
+    def validatePlayerCount(self):
+        if len(self._players) == 4:
+            return 0
+        elif len(self._players) < 2:
+            return 1
+        else:
+            return 2
+
     def horizontalWord(self, content, position):
         self._tempBoard.insertHorizontal(content, position, self._board)
 

@@ -37,7 +37,7 @@
         • Includes functions used to modify a single board field
     - Game:
         • file: game.py
-        • Includes all functions dealing with player's tiles distribution
+        • Includes main game logic and backend functions
     - Scrabble:
         • file: startGame.py
         • Includes all interface functions

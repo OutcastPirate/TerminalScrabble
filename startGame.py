@@ -156,7 +156,7 @@ class Scrabble(Game):
             print('\n' * 5)
             option = input("Choose option: ")
             if option == 'p' or option == 'b':
-                if len(self._players) == 4:
+                if self.validatePlayerCount() == 0:
                     print("\nCannot add more than 4 players.\n")
                     input()
                     continue
@@ -176,7 +176,7 @@ class Scrabble(Game):
                     newPlayer = Bot(playerName)
                 self.addPlayer(newPlayer)
             elif option == 's':
-                if (len(self._players) <= 1):
+                if (self.validatePlayerCount() == 1):
                     print('\nCannot start without at least 2 players\n')
                     input()
                     continue
