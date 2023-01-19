@@ -8,7 +8,9 @@
 
     - the player will not receive points for creating a word that is already on the board
         (second instance of the same word)
-    -
+    - there have to be at least 2 players for the game to start
+    - maximum number of players in game is 4
+        * - adding more players would result in limited possibilities of creating words and distributing tiles
 
 # Main files and their content
 
@@ -64,17 +66,17 @@
 
 ## Game Start
 
-After launching 'startGame.py' file the user is presented with a starting screen with option selection:
-    - add Player
-    - add Bot
-    - delete Player
-    - start Game
+    After launching 'startGame.py' file the user is presented with a starting screen with option selection:
+        - add Player
+        - add Bot
+        - delete Player
+        - start Game
 
-Basic rules:
-    - user has to add at least 2 players/bots in order to begin the game
-    - there cannot be more than 4 players
-    - players and bots are deleted using their nametag
-    - both bots' and players' names have to be unique
+    Basic rules:
+        - user has to add at least 2 players/bots in order to begin the game
+        - there cannot be more than 4 players
+        - players and bots are deleted using their nametag
+        - both bots' and players' names have to be unique
 
 
 ## Main Game course
