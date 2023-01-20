@@ -1,5 +1,5 @@
 from tileTable import tileTable
-from settings import boardCharacter
+from settings import BOARDCHARACTER
 
 
 class CharacterError(ValueError):
@@ -12,14 +12,14 @@ class FieldError(ValueError):
 
 class Field:
     def __init__(self):
-        self._letter = boardCharacter
+        self._letter = BOARDCHARACTER
 
     @property
     def letter(self):
         return self._letter
 
     def setLetter(self, letter):
-        if self._letter == boardCharacter or self._letter == letter:
+        if self._letter == BOARDCHARACTER or self._letter == letter:
             if letter in tileTable.keys():
                 self._letter = letter
             else:

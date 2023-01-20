@@ -1,5 +1,5 @@
 from random import sample
-from settings import basicTileNumber
+from settings import BASICTILENUMBER
 from pointTable import pointTable
 
 
@@ -15,7 +15,7 @@ class Player:
         self._tileLetters = []
 
     def getStartingTiles(self, tiles):
-        self._tiles = sample(tiles, basicTileNumber)
+        self._tiles = sample(tiles, BASICTILENUMBER)
         for tile in self._tiles:
             tiles.remove(tile)
         self.updateLetters()
@@ -33,10 +33,10 @@ class Player:
         self.updateLetters()
 
     def reloadTiles(self, tiles):
-        if len(tiles) < (basicTileNumber - len(self._tiles)):
+        if len(tiles) < (BASICTILENUMBER - len(self._tiles)):
             tempTiles = sample(tiles, len(tiles))
         else:
-            tempTiles = sample(tiles, (basicTileNumber - len(self._tiles)))
+            tempTiles = sample(tiles, (BASICTILENUMBER - len(self._tiles)))
         for tile in tempTiles:
             self._tiles.append(tile)
         for tile in tempTiles:

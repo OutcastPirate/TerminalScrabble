@@ -3,7 +3,7 @@ from checkDict import newDict
 from copy import copy
 from pointTable import pointTable
 from math import floor
-from settings import boardSize as BSIZE, boardCharacter as BCHAR, maxWordLength
+from settings import BSIZE, BOARDCHARACTER as BCHAR, MAXWORDLENGTH
 from random import choice
 
 
@@ -50,7 +50,7 @@ class Bot(Player):
                 except IndexError:
                     continue
                 if term1 and term2 and term3 and term4 and term5:
-                    for x in range(maxWordLength):
+                    for x in range(MAXWORDLENGTH):
                         if board._fields[i][j + x] == BCHAR:
                             freeFields += 1
                         else:
@@ -90,7 +90,7 @@ class Bot(Player):
                 except IndexError:
                     continue
                 if term1 and term2 and term3 and term4 and term5:
-                    for x in range(maxWordLength):
+                    for x in range(MAXWORDLENGTH):
                         if board._fields[i + x][j] == BCHAR:
                             freeFields += 1
                         else:
@@ -134,7 +134,7 @@ class Bot(Player):
                 except IndexError:
                     continue
                 if term1 and term2 and term3 and term4 and term5:
-                    for x in range(maxWordLength):
+                    for x in range(MAXWORDLENGTH):
                         if board._fields[i][j + x] == BCHAR:
                             freeFields += 1
                         else:
@@ -185,7 +185,7 @@ class Bot(Player):
                 except IndexError:
                     continue
                 if term1 and term2 and term3 and term4 and term5:
-                    for x in range(maxWordLength):
+                    for x in range(MAXWORDLENGTH):
                         if board._fields[i - x][j] == BCHAR:
                             freeFields += 1
                         else:

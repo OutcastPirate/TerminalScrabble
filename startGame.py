@@ -6,8 +6,8 @@ from player import Player
 from bot import Bot
 from fieldLetters import fieldLet
 from checkDict import createDict
-from settings import boardCharacter as BCHAR
-from settings import boardSize as BSIZE
+from settings import BOARDCHARACTER as BCHAR
+from settings import BSIZE
 from math import floor
 from board import WrongWordError
 from field import FieldError

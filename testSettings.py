@@ -1,5 +1,5 @@
-boardSize = 15
-wordsDict = './slowa.txt'
-basicTileNumber = 7
-boardCharacter = '[ ]'  # '⬚'  "⛶"  '⬡' '▢'
-maxWordLength = 5
+BSIZE = 15
+WORDSDICT = './slowa.txt'
+BASICTILENUMBER = 7
+BOARDCHARACTER = '[ ]'
+MAXWORDLENGTH = 5

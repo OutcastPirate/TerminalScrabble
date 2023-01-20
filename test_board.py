@@ -2,7 +2,7 @@ from board import (
     Board,
     NotConnectedError
     )
-from testSettings import boardSize as BSIZE
+from testSettings import BSIZE
 from pytest import raises
 from random import choice
 from field import FieldError
@@ -16,7 +16,7 @@ def test_boardInit():
 
 def test_boardInitError(monkeypatch):
     boardSizeTest = 8
-    monkeypatch.setattr('board.boardSize', boardSizeTest)
+    monkeypatch.setattr('board.BSIZE', boardSizeTest)
     with raises(SystemExit):
         Board()
 

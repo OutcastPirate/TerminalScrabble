@@ -1,11 +1,11 @@
 from field import Field, CharacterError, FieldError
-from testSettings import boardCharacter as BCHAR
+from testSettings import BOARDCHARACTER
 from pytest import raises
 
 
 def test_field_init_letter():
     field = Field()
-    assert field._letter == BCHAR
+    assert field._letter == BOARDCHARACTER
 
 
 def test_letterSet():

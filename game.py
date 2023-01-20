@@ -1,5 +1,5 @@
 from board import Board, BoardError
-from settings import boardSize as BSIZE
+from settings import BSIZE
 from fieldLetters import fieldLet
 from tiles import tiles
 from tile import TileError

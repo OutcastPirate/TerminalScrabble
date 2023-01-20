@@ -1,4 +1,4 @@
-from settings import boardSize, boardCharacter
+from settings import BSIZE, BOARDCHARACTER
 from field import Field
 from fieldLetters import fieldInt
 from checkDict import getWords
@@ -29,17 +29,17 @@ def wordInDict(word):
 
 class Board:
     def __init__(self):
-        if boardSize % 2 == 0 or boardSize < 15:
+        if BSIZE % 2 == 0 or BSIZE < 15:
             if __name__ != 'main':
                 print("\nCannot start with current settings.\n")
                 print("Board size has to be an even number >= 15.\n")
                 quit()
         else:
-            self._size = boardSize
+            self._size = BSIZE
         self._fields = []
-        for i in range(boardSize):
+        for i in range(BSIZE):
             row = []
-            for x in range(boardSize):
+            for x in range(BSIZE):
                 rowField = Field()
                 row.append(rowField)
             self._fields.append(row)
@@ -64,15 +64,15 @@ class Board:
             except IndexError:
                 pass
 
-        middle = floor(boardSize / 2)
+        middle = floor(BSIZE / 2)
         firstTerm = (len(set(letters)) == 1)
-        secondTerm = (list(set(letters))[0] == boardCharacter)
-        thirdTerm = (self._fields[middle][middle]._letter != boardCharacter)
+        secondTerm = (list(set(letters))[0] == BOARDCHARACTER)
+        thirdTerm = (self._fields[middle][middle]._letter != BOARDCHARACTER)
         if firstTerm and secondTerm and thirdTerm:
             raise NotConnectedError
         for i in range(len(content)):
             self._fields[row - 1][column + i - 1].setLetter(content[i])
-        fourthTerm = (self._fields[middle][middle]._letter == boardCharacter)
+        fourthTerm = (self._fields[middle][middle]._letter == BOARDCHARACTER)
         if firstTerm and secondTerm and fourthTerm:
             raise NotConnectedError
 
@@ -92,15 +92,15 @@ class Board:
                 letters.append(self._fields[field[0]][field[1]]._letter)
             except IndexError:
                 pass
-        middle = floor(boardSize / 2)
+        middle = floor(BSIZE / 2)
         firstTerm = (len(set(letters)) == 1)
-        secondTerm = (list(set(letters))[0] == boardCharacter)
-        thirdTerm = (self._fields[middle][middle]._letter != boardCharacter)
+        secondTerm = (list(set(letters))[0] == BOARDCHARACTER)
+        thirdTerm = (self._fields[middle][middle]._letter != BOARDCHARACTER)
         if firstTerm and secondTerm and thirdTerm:
             raise NotConnectedError
         for i in range(len(content)):
             self._fields[row + i - 1][column - 1].setLetter(content[i])
-        fourthTerm = (self._fields[middle][middle]._letter == boardCharacter)
+        fourthTerm = (self._fields[middle][middle]._letter == BOARDCHARACTER)
         if firstTerm and secondTerm and fourthTerm:
             raise NotConnectedError
 
@@ -113,19 +113,19 @@ class Board:
 
     def getBoardWords(self):
         words = []
-        for i in range(boardSize):
+        for i in range(BSIZE):
             row = ''
-            for o in range(boardSize):
+            for o in range(BSIZE):
                 row += self._fields[i][o].letter
-            line = row.split(boardCharacter)
+            line = row.split(BOARDCHARACTER)
             for word in line:
                 if word != '' and len(word) > 1:
                     words.append(word)
-        for i in range(boardSize):
+        for i in range(BSIZE):
             row = ''
-            for o in range(boardSize):
+            for o in range(BSIZE):
                 row += self._fields[o][i].letter
-            line = row.split(boardCharacter)
+            line = row.split(BOARDCHARACTER)
             for word in line:
                 if word != '' and len(word) > 1:
                     words.append(word)
@@ -136,9 +136,9 @@ class Board:
         column = coords[1] - 1
         if direction == 'right':
             for i in range(len(word)):
-                if column + i not in range(boardSize):
+                if column + i not in range(BSIZE):
                     raise BadFitError
         if direction == 'down':
             for i in range(len(word)):
-                if row + i not in range(boardSize):
+                if row + i not in range(BSIZE):
                     raise BadFitError
