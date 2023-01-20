@@ -1,4 +1,4 @@
-from game import Game
+from game import Game, NameRepetitionError
 from board import Board, BoardError
 from player import Player
 from pytest import raises
@@ -493,3 +493,17 @@ def test_defineBotTurnCancel():
     scrabble._playerMoveCounter = 9
     scrabble._botCancel = True
     assert scrabble.defineBotTurn() == 'c'
+
+
+def test_addExistingPlayer():
+    scrabble = Game()
+    Jack = Player('Jack')
+    Francis = Player('Jack')
+    scrabble.addPlayer(Jack)
+    with raises(NameRepetitionError):
+        scrabble.addPlayer(Francis)
+
+
+def test_gameWinnerInit():
+    scrabble = Game()
+    assert scrabble._winner is None

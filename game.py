@@ -19,7 +19,7 @@ class Game:
         self._board = Board()
         self._tiles = tiles
         self._players = []
-        self._winner = Player('a')
+        self._winner = None
         self._turnsSkipped = 0
         self._gameInProgress = False
         self._playerIndex = 0
@@ -29,7 +29,7 @@ class Game:
         self._ENDGAME = False
         self._botCancel = False
         self._endTurn = False
-        self._currentPlayer = Player('a')
+        self._currentPlayer = None
 
     @property
     def gameBoard(self):
