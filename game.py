@@ -42,11 +42,11 @@ class Game:
         return names
 
     def addPlayer(self, player):
+        if not isinstance(player, Player):
+            raise ValueError("Player has to be an instance of Player class")
         names = self.getPlayerNames()
         if player._name in names:
             raise NameRepetitionError
-        if not isinstance(player, Player):
-            raise ValueError("Player has to be an instance of Player class")
         self._players.append(player)
 
     def removePlayer(self, player):

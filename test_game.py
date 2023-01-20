@@ -451,7 +451,6 @@ def test_preparePlayerCheckEndTurn():
     scrabble.setGameVariables()
     scrabble.addPlayer(Violet)
     scrabble.addPlayer(Jack)
-    scrabble.setGameVariables()
     scrabble._playerIndex = 0
     scrabble.preparePlayer()
     assert scrabble._endTurn is False
@@ -462,7 +461,6 @@ def test_verifyEndTurnSkipped():
     Violet = Player('Violet')
     scrabble.setGameVariables()
     scrabble.addPlayer(Violet)
-    scrabble.setGameVariables()
     scrabble._playerMoveCounter = 1
     scrabble.verifyEndTurn()
     assert scrabble._turnsSkipped == 1
@@ -470,10 +468,9 @@ def test_verifyEndTurnSkipped():
 
 def test_verifyEndTurn():
     scrabble = Game()
+    scrabble.setGameVariables()
     Violet = Player('Violet')
-    scrabble.setGameVariables()
     scrabble.addPlayer(Violet)
-    scrabble.setGameVariables()
     scrabble._playerMoveCounter = 2
     scrabble.verifyEndTurn()
     assert scrabble._turnsSkipped == 0

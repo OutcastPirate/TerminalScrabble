@@ -166,9 +166,9 @@ def test_invertedVerMoveWordCheck():
     ]
     Optimus.updateLetters()
     Jack.updateLetters()
+    scrabble.setGameVariables()
     scrabble.addPlayer(Jack)
     scrabble.addPlayer(Optimus)
-    scrabble.setGameVariables()
     scrabble._currentPlayer = Jack
     scrabble.placeTilesTurn(Jack, "PTAKI", ('H', 8), 'right')
     scrabble.endTurn(Jack)
