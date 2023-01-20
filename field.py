@@ -19,7 +19,7 @@ class Field:
         return self._letter
 
     def setLetter(self, letter):
-        if self._letter == BOARDCHARACTER or self._letter == letter:
+        if self._letter == BOARDCHARACTER:
             if letter in tileTable.keys():
                 self._letter = letter
             else:

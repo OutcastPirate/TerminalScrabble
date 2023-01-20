@@ -91,6 +91,17 @@
         - both bots' and players' names have to be unique
 
 
+### Bot Usage
+
+    It is possible to start a game with just bots playing.
+
+    In order to add a bot choose option 'b'.
+
+    Bots are named by players.
+
+    After every move of a bot, the game will display the gameBoard for the players to view.
+
+
 ## Main Game course
 
     At the beggining of the game, each player is assigned 7 letter tiles from the tiles' pool.
@@ -168,6 +179,10 @@
     If a player chooses 'e' as their move their turn is skipped with no consequences.
 
     However, if all players skip their turns twice in a row (in example: there are 4 players and there were 8 consequtive turn skips) the game ends.
+
+### Leaderboard
+
+    After each full turn (all players made their moves), a leaderboard with current points will display on the screen
 
 ## GAME END
 

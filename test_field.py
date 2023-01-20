@@ -31,3 +31,10 @@ def test_letter():
     field = Field()
     field.setLetter('H')
     assert field.letter == 'H'
+
+
+def test_letterSetSameLetter():
+    field = Field()
+    field.setLetter('A')
+    with raises(FieldError):
+        field.setLetter('A')
