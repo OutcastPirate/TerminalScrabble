@@ -8,6 +8,10 @@
         - initiate an instance 'Scrabble' class located in startGame.py file
         - initiate play() function on previously created instance of the Scrabble class
 
+    ! - The game should be started with the console in fullscreen mode in order to prevent incorrect display.
+
+    ! - Changing certain settings will result in the game not starting properly (see 'Main files and their content / Config files' chapter)
+
     Sample code for starting up the game is already included in startGame.py file, running it will also begin the game.
 
 # Additional corrections and decisions made during the project:
@@ -48,7 +52,7 @@
         • file: startGame.py
         • Includes all interface functions
 
-## Config file
+## Config files
 
     Settings are located in the settings.py file.
     Those include:
@@ -56,6 +60,7 @@
                 ? - standard value = 15, lowest possible value = 15 (Smaller boards wouldn't make sense)
                 ! - ALWAYS has to be an odd number for the game to work, if set to an even value the game won't start
                 !! - Changing this setting is not recommended as it may interfere with the game's original purpose
+                * changing this to one bigger than 15 may result in wrong display on monitors smaller than 17 inches
 
         • wordsDict -> location of the game dictionary with all accepted words
         • basicTileNumber -> Number of tiles assigned to each player
@@ -126,6 +131,11 @@
         "H8" and then at "I8" "J8"...
         - while placing only one tile the format of the input doesn't matter
 
+
+    Illegal moves:
+    - placing tiles on tiles already occupied
+    - placing tiles out of bounds of the board
+    - placing first tile outside of the middle field
 
 ### Swapping tiles
 
