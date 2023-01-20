@@ -4,6 +4,12 @@
         1. Running 'startGame.py' file while inside it
         2. launch with 'python3 startGame.py' in terminal while inside 'pythonscrabble' folder
 
+    To propely launch the game with code:
+        - initiate an instance 'Scrabble' class located in startGame.py file
+        - initiate play() function on previously created instance of the Scrabble class
+
+    Sample code for starting up the game is already included in startGame.py file, running it will also begin the game.
+
 # Additional corrections and decisions made during the project:
 
     - the player will not receive points for creating a word that is already on the board
