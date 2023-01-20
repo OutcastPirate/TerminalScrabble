@@ -240,7 +240,7 @@ class Scrabble(Game):
 
     def placeTilesInterface(self):
         if isinstance(self._currentPlayer, Bot):
-            self._currentPlayer.makeMove(self._tempBoard, self._board)  # noqa: E501
+            self._currentPlayer.makeMove(self._tempBoard, self._board)
             if len(self._currentPlayer._moves) == 0:
                 self._endTurn = True
                 return

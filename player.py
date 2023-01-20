@@ -21,6 +21,7 @@ class Player:
         self.updateLetters()
 
     def swapTiles(self, positions, tiles):
+        positions = sorted(positions)
         if len(tiles) < len(positions):
             raise TileError("Not enough tiles left")
         tempTiles = sample(tiles, len(positions))

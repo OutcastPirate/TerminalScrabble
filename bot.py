@@ -116,11 +116,6 @@ class Bot(Player):
                             self._moves.append([word, pts, coord, "down"])
 
     def checkInvHorMoves(self, board):
-        """
-        Meaning: Check for (Inv)erted (Hor)izontal Moves
-
-        Checks for possible moves where the last letter is already on the board
-        """
         for i in range(BSIZE):
             for j in range(BSIZE):
                 possible = {}
@@ -167,11 +162,6 @@ class Bot(Player):
                                 self._moves.append([text, pts, pos, "right"])
 
     def checkInvVerMoves(self, board):
-        """
-        Meaning: Check for (Inv)erted (Ver)tical Moves
-
-        Checks for possible moves where the last letter is already on the board
-        """
         for i in range(BSIZE):
             for j in range(BSIZE):
                 possible = {}
