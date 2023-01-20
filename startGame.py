@@ -1,4 +1,4 @@
-from game import Game
+from game import Game, NameRepetitionError
 from os import system, name as osName
 from colors import Color as C
 from board import BoardError, NotConnectedError, BadFitError
@@ -103,6 +103,44 @@ class Scrabble(Game):
             direction = ''
         self.placeTilesTurn(currentPlayer, word, coords, direction)
 
+    def interfacePlayerRemoval(self):
+        if len(self._players) == 0:
+            print("\nThere are no players to remove\n")
+            input()
+            return
+        removeName = input("Remove player: ")
+        if removeName not in self.getPlayerNames():
+            print("\nNo such player in game\n")
+            input()
+            return
+        else:
+            for player in self._players:
+                if player._name == removeName:
+                    self.removePlayer(player)
+                    break
+            return
+
+    def interfacePlayerAddition(self, option):
+        if self.validatePlayerCount() == 0:
+            print("\nCannot add more than 4 players.\n")
+            input()
+            return
+        playerName = input(f"Player {len(self._players) + 1}: ")
+        if playerName == '':
+            print("\nPlayer's name cannot be empty\n")
+            input()
+            return
+        if option == 'p':
+            newPlayer = Player(playerName)
+        else:
+            newPlayer = Bot(playerName)
+        try:
+            self.addPlayer(newPlayer)
+        except NameRepetitionError:
+            print("\nPlayer's name has to be unique\n")
+            input()
+            return
+
     def placeTilesCheck(self, currentPlayer):
         try:
             self.placeTilesInput(currentPlayer)
@@ -139,7 +177,6 @@ class Scrabble(Game):
 
     def beginGame(self):
         createDict()
-        players = []
         while (True):
             if (osName == 'posix'):
                 system('clear')
@@ -161,25 +198,7 @@ class Scrabble(Game):
             print('\n' * 5)
             option = input("Choose option: ")
             if option == 'p' or option == 'b':
-                if self.validatePlayerCount() == 0:
-                    print("\nCannot add more than 4 players.\n")
-                    input()
-                    continue
-                playerName = input(f"Player {len(self._players) + 1}: ")
-                if playerName == '':
-                    print("\nPlayer's name cannot be empty\n")
-                    input()
-                    continue
-                elif playerName in players:
-                    print("\nPlayer's name has to be unique\n")
-                    input()
-                    continue
-                players.append(playerName)
-                if option == 'p':
-                    newPlayer = Player(playerName)
-                else:
-                    newPlayer = Bot(playerName)
-                self.addPlayer(newPlayer)
+                self.interfacePlayerAddition(option)
             elif option == 's':
                 if (self.validatePlayerCount() == 1):
                     print('\nCannot start without at least 2 players\n')
@@ -187,30 +206,10 @@ class Scrabble(Game):
                     continue
                 break
             elif option == 'd':
-                if len(self._players) == 0:
-                    print("\nThere are no players to remove\n")
-                    input()
-                    continue
-                removeName = input("Remove player: ")
-                if removeName not in players:
-                    print("\nNo such player in game\n")
-                    input()
-                    continue
-                else:
-                    for x in range(len(players)):
-                        if players[x] == removeName:
-                            del players[x]
-                            break
-                    for player in self._players:
-                        if player._name == removeName:
-                            self.removePlayer(player)
-                            break
-                    continue
+                self.interfacePlayerRemoval()
             else:
                 print("\nWrong option. Choose again.\n")
                 input()
-        for player in self.players:
-            player.getStartingTiles(self._tiles)
         self.setGameVariables()
 
     def swapTilesTurn(self, currentPlayer):

@@ -9,6 +9,10 @@ from random import choice
 from bot import Bot
 
 
+class NameRepetitionError(Exception):
+    pass
+
+
 class Game:
     def __init__(self):
         self._tempBoard = Board()
@@ -31,7 +35,16 @@ class Game:
     def gameBoard(self):
         return self._board
 
+    def getPlayerNames(self):
+        names = []
+        for player in self._players:
+            names.append(player._name)
+        return names
+
     def addPlayer(self, player):
+        names = self.getPlayerNames()
+        if player._name in names:
+            raise NameRepetitionError
         if not isinstance(player, Player):
             raise ValueError("Player has to be an instance of Player class")
         self._players.append(player)
@@ -46,6 +59,7 @@ class Game:
         return self._players
 
     def setGameVariables(self):
+        self.assignTiles()
         self._turnsSkipped = 0
         self._gameInProgress = True
         self._playerIndex = 0
@@ -71,6 +85,10 @@ class Game:
 
     def verticalWord(self, content, position):
         self._tempBoard.insertVertical(content, position, self._board)
+
+    def assignTiles(self):
+        for player in self.players:
+            player.getStartingTiles(self._tiles)
 
     def placeTilesTurn(self, currentPlayer, word, coords, direction):
         if not isinstance(currentPlayer, Bot):
